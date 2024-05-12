@@ -12,7 +12,7 @@
     <artifactId>gitbot-parent</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>gitbot</name>
+    <name>gitbot-parent</name>
     <description>一个 git 托管平台机器人</description>
     <url>https://github.com/xuxiaowei-com-cn/gitbot</url>
     <inceptionYear>2024</inceptionYear>
@@ -25,6 +25,10 @@
         <spring-javaformat-maven-plugin.version>0.0.41</spring-javaformat-maven-plugin.version>
         <skipTests>true</skipTests>
     </properties>
+
+    <modules>
+        <module>gitbot</module>
+    </modules>
 
     <licenses>
         <license>
