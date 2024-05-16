@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 /**
  * @author xuxiaowei
  * @since 0.0.1
@@ -45,6 +47,8 @@ class ProcessBuilderTests {
 
 			int exitCode = process.waitFor();
 			log.info("Process exited with code: {}", exitCode);
+
+			assertEquals(0, exitCode);
 		}
 		catch (IOException | InterruptedException e) {
 			log.error("测试命令异常：", e);
