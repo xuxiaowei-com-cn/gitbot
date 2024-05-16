@@ -2,8 +2,9 @@ package cn.com.xuxiaowei.gitbot.github;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
-import org.kohsuke.github.GHRepository;
+import org.kohsuke.github.GHUser;
 import org.kohsuke.github.GHOrganization;
+import org.kohsuke.github.GHRepository;
 import org.kohsuke.github.GitHub;
 import org.kohsuke.github.GitHubBuilder;
 import org.kohsuke.github.PagedIterable;
@@ -55,6 +56,17 @@ class GitHubTests {
 		for (GHRepository ghRepository : ghRepositories) {
 			log.info(ghRepository.getName());
 		}
+	}
+
+	@Test
+	void getUser() throws IOException {
+		String namespace = "xuxiaowei-com-cn";
+
+		GitHub github = GitHubBuilder.fromEnvironment().build();
+
+		GHUser user = github.getUser(namespace);
+
+		assertEquals(namespace, user.getLogin());
 	}
 
 }
