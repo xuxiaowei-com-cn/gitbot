@@ -22,21 +22,18 @@ class RuntimeTests {
 		boolean isWindows = os.contains("windows");
 
 		String command;
-		String[] args;
 		String charsetName;
 		if (isWindows) {
-			command = "ipconfig";
-			args = null;
+			command = "ipconfig /all";
 			charsetName = "GBK";
 		}
 		else {
-			command = "mvn";
-			args = new String[] { "-v" };
+			command = "mvn -v";
 			charsetName = "UTF-8";
 		}
 
 		try {
-			Process process = Runtime.getRuntime().exec(command, args);
+			Process process = Runtime.getRuntime().exec(command);
 
 			InputStream is = process.getInputStream();
 			BufferedReader reader = new BufferedReader(new InputStreamReader(is, charsetName));
