@@ -16,7 +16,7 @@ import java.io.InputStreamReader;
 class ProcessBuilderTests {
 
 	@Test
-	void ip() {
+	void command() {
 		String os = System.getProperty("os.name").toLowerCase();
 		boolean isWindows = os.contains("windows");
 
@@ -27,7 +27,7 @@ class ProcessBuilderTests {
 			charsetName = "GBK";
 		}
 		else {
-			command = new String[] { "ip", "addr" };
+			command = new String[] { "mvn", "-v" };
 			charsetName = "UTF-8";
 		}
 
@@ -47,7 +47,7 @@ class ProcessBuilderTests {
 			log.info("Process exited with code: {}", exitCode);
 		}
 		catch (IOException | InterruptedException e) {
-			log.error("查看 IP 异常：", e);
+			log.error("测试命令异常：", e);
 		}
 	}
 

@@ -16,7 +16,7 @@ import java.io.InputStreamReader;
 class RuntimeTests {
 
 	@Test
-	void ip() {
+	void command() {
 
 		String os = System.getProperty("os.name").toLowerCase();
 		boolean isWindows = os.contains("windows");
@@ -30,8 +30,8 @@ class RuntimeTests {
 			charsetName = "GBK";
 		}
 		else {
-			command = "ip";
-			args = new String[] { "addr" };
+			command = "mvn";
+			args = new String[] { "-v" };
 			charsetName = "UTF-8";
 		}
 
@@ -50,7 +50,7 @@ class RuntimeTests {
 			log.info("Process exited with code: {}", exitCode);
 		}
 		catch (IOException | InterruptedException e) {
-			log.error("查看 IP 异常：", e);
+			log.error("测试命令异常：", e);
 		}
 	}
 
