@@ -22,6 +22,7 @@
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <p6spy.version>3.9.1</p6spy.version>
         <github-api.version>1.321</github-api.version>
         <spring-javaformat-maven-plugin.version>0.0.41</spring-javaformat-maven-plugin.version>
         <skipTests>true</skipTests>
@@ -33,6 +34,11 @@
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>p6spy</groupId>
+                <artifactId>p6spy</artifactId>
+                <version>${p6spy.version}</version>
+            </dependency>
             <dependency>
                 <groupId>org.kohsuke</groupId>
                 <artifactId>github-api</artifactId>

@@ -1,0 +1,53 @@
+server:
+  port: ${GITBOT_PORT:45950}
+  forward-headers-strategy: NATIVE
+  tomcat:
+    # https://docs.spring.io/spring-boot/how-to/webserver.html#howto.webserver.use-behind-a-proxy-server.tomcat
+    remoteip:
+      # 从中提取远程IP的HTTP标头的名称。 例如，`X-Forwarded-For`、`X-Real-IP`。
+      remote-ip-header: X-Forwarded-For
+      # 用于覆盖原始端口值的HTTP标头的名称。
+      port-header: X-Forwarded-Proto
+  compression:
+    # 开启压缩
+    enabled: true
+
+---
+
+spring:
+  application:
+    name: gitbot
+---
+
+spring:
+  data:
+    redis:
+      host: ${GITBOT_REDIS_HOST:127.0.0.1}
+      port: ${GITBOT_REDIS_PORT:6379}
+      database: ${GITBOT_REDIS_DATABASE:8}
+      password: ${GITBOT_REDIS_PASSWORD:xuxiaowei.com.cn}
+
+---
+
+spring:
+  datasource:
+    url: jdbc:p6spy:mysql://${GITBOT_DATABASE_HOST:127.0.0.1}:${GITBOT_DATABASE_PORT:3306}/${GITBOT_DATABASE:gitbot}?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=GMT%2B8
+    driver-class-name: com.p6spy.engine.spy.P6SpyDriver
+    username: ${GITBOT_DATABASE_USERNAME:root}
+    password: ${GITBOT_DATABASE_PASSWORD:xuxiaowei.com.cn}
+
+logging:
+  level:
+    cn.com.xuxiaowei: debug
+    # 当前应用响应数据
+    org.springframework.core.codec.CharSequenceEncoder: debug
+  pattern:
+    console: "%clr(%d{${LOG_DATEFORMAT_PATTERN:yyyy-MM-dd HH:mm:ss.SSS}}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %X{G-Request-Id} %clr(:){faint} %X{G-Host} %clr(:){faint} %X{G-Host-Name} %clr(:){faint} %X{G-Host-Address} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:%wEx}"
+    file: "%d{${LOG_DATEFORMAT_PATTERN:yyyy-MM-dd HH:mm:ss.SSS}} ${LOG_LEVEL_PATTERN:-%5p} ${PID:- } --- [%t] %-40.40logger{39} : %X{G-Request-Id} : %X{G-Host} : %X{G-Host-Name} : %X{G-Host-Address} : %m%n${LOG_EXCEPTION_CONVERSION_WORD:%wEx}"
+  file:
+    name: /logs/${spring.application.name}/${spring.application.name}.log
+  logback:
+    rollingpolicy:
+      max-file-size: 50MB
+      max-history: 365
+      file-name-pattern: ${LOG_FILE}.%d{yyyy-MM-dd}.%i.log.gz
