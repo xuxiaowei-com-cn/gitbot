@@ -6,6 +6,7 @@ import org.kohsuke.github.GHRepository;
 import org.kohsuke.github.GHOrganization;
 import org.kohsuke.github.GitHub;
 import org.kohsuke.github.GitHubBuilder;
+import org.kohsuke.github.PagedIterable;
 
 import java.io.IOException;
 
@@ -38,6 +39,22 @@ class GitHubTests {
 		GHOrganization organization = github.getOrganization(namespace);
 
 		assertEquals(namespace, organization.getLogin());
+	}
+
+	@Test
+	void getOrganizationRepositories() throws IOException {
+		String namespace = "xuxiaowei-cloud";
+
+		GitHub github = GitHubBuilder.fromEnvironment().build();
+
+		GHOrganization organization = github.getOrganization(namespace);
+
+		assertEquals(namespace, organization.getLogin());
+
+		PagedIterable<org.kohsuke.github.GHRepository> ghRepositories = organization.listRepositories();
+		for (GHRepository ghRepository : ghRepositories) {
+			log.info(ghRepository.getName());
+		}
 	}
 
 }
