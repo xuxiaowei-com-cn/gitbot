@@ -69,4 +69,20 @@ class GitHubTests {
 		assertEquals(namespace, user.getLogin());
 	}
 
+	@Test
+	void getUserRepositories() throws IOException {
+		String namespace = "xuxiaowei-com-cn";
+
+		GitHub github = GitHubBuilder.fromEnvironment().build();
+
+		GHUser user = github.getUser(namespace);
+
+		assertEquals(namespace, user.getLogin());
+
+		PagedIterable<GHRepository> ghRepositories = user.listRepositories();
+		for (GHRepository ghRepository : ghRepositories) {
+			log.info(ghRepository.getName());
+		}
+	}
+
 }
