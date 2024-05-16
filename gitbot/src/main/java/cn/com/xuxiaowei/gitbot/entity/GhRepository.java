@@ -3,8 +3,7 @@ package cn.com.xuxiaowei.gitbot.entity;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 /**
  * <p>
@@ -14,8 +13,7 @@ import lombok.Setter;
  * @author xuxiaowei
  * @since 2024-05-16
  */
-@Getter
-@Setter
+@Data
 @TableName("gh_repository")
 public class GhRepository implements Serializable {
 
