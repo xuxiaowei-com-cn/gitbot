@@ -147,7 +147,8 @@ class GitHubTests {
 		repository.setName(ghRepository.getName());
 		repository.setFullName(ghRepository.getFullName());
 		repository.setHtmlUrl(ghRepository.getHtmlUrl().toString());
-		repository.setLicense(ghRepository.getLicense() == null ? null : ghRepository.getLicense().getName());
+		// repository.setLicense(ghRepository.getLicense() == null ? null :
+		// ghRepository.getLicense().getName());
 		repository.setGitUrl(ghRepository.getGitTransportUrl());
 		repository.setSshUrl(ghRepository.getSshUrl());
 		repository.setSvnUrl(ghRepository.getSvnUrl());
@@ -179,8 +180,10 @@ class GitHubTests {
 		// @formatter:off
 		repository.setTemplateRepositoryId(ghRepository.getTemplateRepository() == null ? null : ghRepository.getTemplateRepository().getId());
 		// @formatter:on
-		repository.setSourceId(ghRepository.getSource() == null ? null : ghRepository.getSource().getId());
-		repository.setParentId(ghRepository.getParent() == null ? null : ghRepository.getParent().getId());
+		// repository.setSourceId(ghRepository.getSource() == null ? null :
+		// ghRepository.getSource().getId());
+		// repository.setParentId(ghRepository.getParent() == null ? null :
+		// ghRepository.getParent().getId());
 		repository.setIsTemplate(ghRepository.isTemplate());
 		// try {
 		// List<GHHook> hooks = ghRepository.getHooks();
