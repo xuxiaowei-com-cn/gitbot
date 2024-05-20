@@ -2,6 +2,7 @@ package cn.com.xuxiaowei.gitbot.gitlab;
 
 import cn.com.xuxiaowei.gitbot.entity.GlNamespace;
 import cn.com.xuxiaowei.gitbot.entity.GlProject;
+import cn.com.xuxiaowei.gitbot.properties.GitbotProperties;
 import cn.com.xuxiaowei.gitbot.service.IGlNamespaceService;
 import cn.com.xuxiaowei.gitbot.service.IGlProjectService;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +29,9 @@ public class GitLabTests {
 
 	@Autowired
 	private IGlNamespaceService glNamespaceService;
+
+	@Autowired
+	private GitbotProperties gitbotProperties;
 
 	@Test
 	void getProjects() throws GitLabApiException {
@@ -107,7 +111,7 @@ public class GitLabTests {
 		glProject.setPublicJobs(project.getPublicJobs());
 		glProject.setRepositoryStorage(project.getRepositoryStorage());
 		glProject.setRequestAccessEnabled(project.getRequestAccessEnabled());
-		glProject.setRunnersToken(project.getRunnersToken());
+		glProject.setRunnersToken(gitbotProperties.getGitlab().isSaveRunnersToken() ? project.getRunnersToken() : null);
 		glProject.setSharedRunnersEnabled(project.getSharedRunnersEnabled());
 		// glProject.setSharedWithGroups(project.getSharedWithGroups());
 		glProject.setSnippetsEnabled(project.getSnippetsEnabled());
