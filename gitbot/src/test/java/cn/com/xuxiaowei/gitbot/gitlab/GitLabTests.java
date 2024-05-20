@@ -130,20 +130,24 @@ public class GitLabTests {
 		// glProject.setLicense(project.getLicense());
 		// glProject.setCustomAttributes(project.getCustomAttributes());
 		glProject.setBuildCoverageRegex(project.getBuildCoverageRegex());
-		glProject.setBuildGitStrategy(project.getBuildGitStrategy().toString());
+		// @formatter:off
+		glProject.setBuildGitStrategy(project.getBuildGitStrategy() == null ? null : project.getBuildGitStrategy().toString());
+		// @formatter:on
 		glProject.setReadmeUrl(project.getReadmeUrl());
 		glProject.setCanCreateMergeRequestIn(project.getCanCreateMergeRequestIn());
-		glProject.setImportStatus(project.getImportStatus().toString());
+		glProject.setImportStatus(project.getImportStatus() == null ? null : project.getImportStatus().toString());
 		glProject.setCiDefaultGitDepth(project.getCiDefaultGitDepth());
 		glProject.setCiForwardDeploymentEnabled(project.getCiForwardDeploymentEnabled());
 		glProject.setCiConfigPath(project.getCiConfigPath());
 		glProject.setRemoveSourceBranchAfterMerge(project.getRemoveSourceBranchAfterMerge());
 		glProject.setAutoDevopsEnabled(project.getAutoDevopsEnabled());
-		glProject.setAutoDevopsDeployStrategy(project.getAutoDevopsDeployStrategy().toString());
+		// @formatter:off
+		glProject.setAutoDevopsDeployStrategy(project.getAutoDevopsDeployStrategy() == null ? null : project.getAutoDevopsDeployStrategy().toString());
+		// @formatter:on
 		glProject.setAutocloseReferencedIssues(project.getAutocloseReferencedIssues());
 		glProject.setEmailsDisabled(project.getEmailsDisabled());
 		glProject.setSuggestionCommitMessage(project.getSuggestionCommitMessage());
-		glProject.setSquashOption(project.getSquashOption().toString());
+		glProject.setSquashOption(project.getSquashOption() == null ? null : project.getSquashOption().toString());
 		// @formatter:off
 		glProject.setMarkedForDeletionOn(project.getMarkedForDeletionOn() == null ? null : project.getMarkedForDeletionOn().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
 		// @formatter:on
