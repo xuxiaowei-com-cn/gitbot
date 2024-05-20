@@ -116,7 +116,7 @@ public class GitLabTests {
 		// glProject.setTagList(project.getTagList());
 		// glProject.setTopics(project.getTopics());
 		glProject.setVisibilityLevel(project.getVisibilityLevel());
-		glProject.setVisibility(project.getVisibility().toString());
+		glProject.setVisibility(project.getVisibility() == null ? null : project.getVisibility().toString());
 		glProject.setWallEnabled(project.getWallEnabled());
 		glProject.setWebUrl(project.getWebUrl());
 		glProject.setWikiEnabled(project.getWikiEnabled());
