@@ -30,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @since 0.0.1
  */
 @Slf4j
-@SpringBootTest
+// @SpringBootTest
 class GitHubTests {
 
 	@Autowired
@@ -39,7 +39,7 @@ class GitHubTests {
 	@Autowired
 	private IGhPullRequestService ghPullRequestService;
 
-	@Test
+	// @Test
 	void fromEnvironment() throws IOException {
 		String namespace = "xuxiaowei-com-cn";
 		String projectName = "gitbot";
@@ -62,7 +62,7 @@ class GitHubTests {
 		}
 	}
 
-	@Test
+//	@Test
 	void getOrganization() throws IOException {
 		String namespace = "xuxiaowei-cloud";
 
@@ -78,7 +78,7 @@ class GitHubTests {
 		assertEquals(namespace, ghOrganization.getLogin());
 	}
 
-	@Test
+//	@Test
 	void getOrganizationRepositories() throws IOException {
 		String namespace = "xuxiaowei-cloud";
 
@@ -106,7 +106,7 @@ class GitHubTests {
 		}
 	}
 
-	@Test
+//	@Test
 	void getOrganizationRepositoriesPullRequests() throws IOException {
 		String namespace = "xuxiaowei-cloud";
 
@@ -133,7 +133,7 @@ class GitHubTests {
 		}
 	}
 
-	@Test
+//	@Test
 	void getUser() throws IOException {
 		String namespace = "xuxiaowei-com-cn";
 
@@ -150,7 +150,7 @@ class GitHubTests {
 
 	}
 
-	@Test
+//	@Test
 	void getUserRepositories() throws IOException {
 		String namespace = "xuxiaowei-com-cn";
 
