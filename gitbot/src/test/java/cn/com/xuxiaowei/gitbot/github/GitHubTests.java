@@ -1,10 +1,14 @@
 package cn.com.xuxiaowei.gitbot.github;
 
+import cn.com.xuxiaowei.gitbot.entity.GhPullRequest;
 import cn.com.xuxiaowei.gitbot.entity.GhRepository;
+import cn.com.xuxiaowei.gitbot.service.IGhPullRequestService;
 import cn.com.xuxiaowei.gitbot.service.IGhRepositoryService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
+import org.kohsuke.github.GHIssueState;
 import org.kohsuke.github.GHOrganization;
+import org.kohsuke.github.GHPullRequest;
 import org.kohsuke.github.GHRepository;
 import org.kohsuke.github.GHUser;
 import org.kohsuke.github.GitHub;
@@ -32,15 +36,19 @@ class GitHubTests {
 	@Autowired
 	private IGhRepositoryService ghRepositoryService;
 
+	@Autowired
+	private IGhPullRequestService ghPullRequestService;
+
 	@Test
 	void fromEnvironment() throws IOException {
 		String namespace = "xuxiaowei-com-cn";
 		String projectName = "gitbot";
 
 		GitHubBuilder gitHubBuilder = GitHubBuilder.fromEnvironment();
-		// Proxy proxy = new Proxy(Proxy.Type.SOCKS, new InetSocketAddress("127.0.0.1",
-		// 1080));
-		// gitHubBuilder.withProxy(proxy);
+		// @formatter:off
+		//Proxy proxy = new Proxy(Proxy.Type.SOCKS, new InetSocketAddress("127.0.0.1", 1080));
+		//gitHubBuilder.withProxy(proxy);
+		// @formatter:off
 		GitHub github = gitHubBuilder.build();
 		GHRepository ghRepository = github.getRepository(namespace + "/" + projectName);
 
@@ -59,9 +67,10 @@ class GitHubTests {
 		String namespace = "xuxiaowei-cloud";
 
 		GitHubBuilder gitHubBuilder = GitHubBuilder.fromEnvironment();
-		// Proxy proxy = new Proxy(Proxy.Type.SOCKS, new InetSocketAddress("127.0.0.1",
-		// 1080));
-		// gitHubBuilder.withProxy(proxy);
+		// @formatter:off
+		//Proxy proxy = new Proxy(Proxy.Type.SOCKS, new InetSocketAddress("127.0.0.1", 1080));
+		//gitHubBuilder.withProxy(proxy);
+		// @formatter:off
 		GitHub github = gitHubBuilder.build();
 
 		GHOrganization ghOrganization = github.getOrganization(namespace);
@@ -74,9 +83,10 @@ class GitHubTests {
 		String namespace = "xuxiaowei-cloud";
 
 		GitHubBuilder gitHubBuilder = GitHubBuilder.fromEnvironment();
-		// Proxy proxy = new Proxy(Proxy.Type.SOCKS, new InetSocketAddress("127.0.0.1",
-		// 1080));
-		// gitHubBuilder.withProxy(proxy);
+		// @formatter:off
+		//Proxy proxy = new Proxy(Proxy.Type.SOCKS, new InetSocketAddress("127.0.0.1", 1080));
+		//gitHubBuilder.withProxy(proxy);
+		// @formatter:off
 		GitHub github = gitHubBuilder.build();
 
 		GHOrganization ghOrganization = github.getOrganization(namespace);
@@ -97,13 +107,41 @@ class GitHubTests {
 	}
 
 	@Test
+	void getOrganizationRepositoriesPullRequests() throws IOException {
+		String namespace = "xuxiaowei-cloud";
+
+		GitHubBuilder gitHubBuilder = GitHubBuilder.fromEnvironment();
+		// @formatter:off
+		//Proxy proxy = new Proxy(Proxy.Type.SOCKS, new InetSocketAddress("127.0.0.1", 1080));
+		//gitHubBuilder.withProxy(proxy);
+		// @formatter:off
+		GitHub github = gitHubBuilder.build();
+
+		GHOrganization ghOrganization = github.getOrganization(namespace);
+
+		assertEquals(namespace, ghOrganization.getLogin());
+
+		PagedIterable<GHRepository> ghRepositories = ghOrganization.listRepositories();
+		for (GHRepository ghRepository : ghRepositories) {
+			log.info(ghRepository.getName());
+
+			List<GHPullRequest> pullRequests = ghRepository.getPullRequests(GHIssueState.ALL);
+
+			for (GHPullRequest pullRequest : pullRequests) {
+				saveOrUpdate(pullRequest);
+			}
+		}
+	}
+
+	@Test
 	void getUser() throws IOException {
 		String namespace = "xuxiaowei-com-cn";
 
 		GitHubBuilder gitHubBuilder = GitHubBuilder.fromEnvironment();
-		// Proxy proxy = new Proxy(Proxy.Type.SOCKS, new InetSocketAddress("127.0.0.1",
-		// 1080));
-		// gitHubBuilder.withProxy(proxy);
+		// @formatter:off
+		//Proxy proxy = new Proxy(Proxy.Type.SOCKS, new InetSocketAddress("127.0.0.1", 1080));
+		//gitHubBuilder.withProxy(proxy);
+		// @formatter:off
 		GitHub github = gitHubBuilder.build();
 
 		GHUser user = github.getUser(namespace);
@@ -117,9 +155,10 @@ class GitHubTests {
 		String namespace = "xuxiaowei-com-cn";
 
 		GitHubBuilder gitHubBuilder = GitHubBuilder.fromEnvironment();
-		// Proxy proxy = new Proxy(Proxy.Type.SOCKS, new InetSocketAddress("127.0.0.1",
-		// 1080));
-		// gitHubBuilder.withProxy(proxy);
+		// @formatter:off
+		//Proxy proxy = new Proxy(Proxy.Type.SOCKS, new InetSocketAddress("127.0.0.1", 1080));
+		//gitHubBuilder.withProxy(proxy);
+		// @formatter:off
 		GitHub github = gitHubBuilder.build();
 
 		GHUser user = github.getUser(namespace);
@@ -199,6 +238,56 @@ class GitHubTests {
 		// @formatter:on
 
 		ghRepositoryService.saveOrUpdate(repository);
+	}
+
+	void saveOrUpdate(GHPullRequest ghPullRequest) throws IOException {
+		GhPullRequest pullRequest = new GhPullRequest();
+		pullRequest.setId(ghPullRequest.getId());
+		pullRequest.setPatchUrl(ghPullRequest.getPatchUrl().toString());
+		pullRequest.setDiffUrl(ghPullRequest.getDiffUrl().toString());
+		pullRequest.setIssueUrl(ghPullRequest.getIssueUrl().toString());
+		// @formatter:off
+		pullRequest.setMergedAt(ghPullRequest.getMergedAt() == null ? null : ghPullRequest.getMergedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
+		// @formatter:on
+		pullRequest.setMergedBy(ghPullRequest.getMergedBy() == null ? null : ghPullRequest.getMergedBy().getLogin());
+		pullRequest.setReviewComments(ghPullRequest.getReviewComments());
+		pullRequest.setAdditions(ghPullRequest.getAdditions());
+		pullRequest.setCommits(ghPullRequest.getCommits());
+		// pullRequest.setMerged();
+		// pullRequest.setMaintainerCanModify();
+		// pullRequest.setDraft();
+		pullRequest.setMergeable(ghPullRequest.getMergeable());
+		pullRequest.setDeletions(ghPullRequest.getDeletions());
+		pullRequest.setMergeableState(ghPullRequest.getMergeableState());
+		pullRequest.setChangedFiles(ghPullRequest.getChangedFiles());
+		pullRequest.setMergeCommitSha(ghPullRequest.getMergeCommitSha());
+		// pullRequest.setAutoMerge(ghPullRequest.getAutoMerge());
+		pullRequest.setAssignee(ghPullRequest.getAssignee() == null ? null : ghPullRequest.getAssignee().getLogin());
+		// pullRequest.setAssignees();
+		pullRequest.setState(ghPullRequest.getState().toString());
+		// @formatter:off
+		pullRequest.setStateReason(ghPullRequest.getStateReason() == null ? null : ghPullRequest.getStateReason().toString());
+		// @formatter:on
+		pullRequest.setNumber(ghPullRequest.getNumber());
+		// @formatter:off
+		pullRequest.setClosedAt(ghPullRequest.getClosedAt() == null ? null : ghPullRequest.getClosedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
+		// @formatter:on
+		// pullRequest.setComments();
+		pullRequest.setBody(ghPullRequest.getBody());
+		pullRequest.setTitle(ghPullRequest.getTitle());
+		pullRequest.setHtmlUrl(ghPullRequest.getHtmlUrl().toString());
+		// pullRequest.setPullRequest();
+		// pullRequest.setMilestone();
+		pullRequest.setClosedBy(ghPullRequest.getClosedBy() == null ? null : ghPullRequest.getClosedBy().getLogin());
+		pullRequest.setLocked(ghPullRequest.isLocked());
+		pullRequest.setUrl(ghPullRequest.getUrl().toString());
+		pullRequest.setNodeId(ghPullRequest.getNodeId());
+		// @formatter:off
+		pullRequest.setCreatedAt(ghPullRequest.getCreatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
+		pullRequest.setUpdatedAt(ghPullRequest.getUpdatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
+		// @formatter:on
+
+		ghPullRequestService.saveOrUpdate(pullRequest);
 	}
 
 }
