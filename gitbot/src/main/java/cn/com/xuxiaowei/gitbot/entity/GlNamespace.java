@@ -7,7 +7,7 @@ import lombok.Setter;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author xuxiaowei
@@ -18,19 +18,20 @@ import lombok.Setter;
 @TableName("gl_namespace")
 public class GlNamespace implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    private Long id;
+	private Long id;
 
-    private String name;
+	private String name;
 
-    private String path;
+	private String path;
 
-    private String kind;
+	private String kind;
 
-    private String fullPath;
+	private String fullPath;
 
-    private String avatarUrl;
+	private String avatarUrl;
 
-    private String webUrl;
+	private String webUrl;
+
 }
