@@ -13,6 +13,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.time.ZoneId;
 import java.util.List;
 
@@ -34,33 +36,40 @@ public class GitLabTests {
 	private GitbotProperties gitbotProperties;
 
 	@Test
-	void getProjects() throws GitLabApiException {
+	void getProjects() throws GitLabApiException, MalformedURLException {
 		try (GitLabApi gitLabApi = new GitLabApi("https://gitlab.xuxiaowei.com.cn", null)) {
 			gitLabApi.setIgnoreCertificateErrors(true);
+			String gitLabServerUrl = gitLabApi.getGitLabServerUrl();
+			URL url = new URL(gitLabServerUrl);
+			String host = url.getHost();
 			List<Project> projects = gitLabApi.getProjectApi().getProjects();
 			for (Project project : projects) {
 				log.info(project.getName());
-				saveOrUpdate(project);
+				saveOrUpdate(project, host);
 			}
 		}
 	}
 
 	@Test
-	void getOwnedProjects() throws GitLabApiException {
+	void getOwnedProjects() throws GitLabApiException, MalformedURLException {
 		String personalAccessToken = System.getenv("GITBOT_GITLAB_TOKEN");
 		try (GitLabApi gitLabApi = new GitLabApi("https://jihulab.com", personalAccessToken)) {
 			gitLabApi.setIgnoreCertificateErrors(true);
+			String gitLabServerUrl = gitLabApi.getGitLabServerUrl();
+			URL url = new URL(gitLabServerUrl);
+			String host = url.getHost();
 			List<Project> projects = gitLabApi.getProjectApi().getOwnedProjects();
 			for (Project project : projects) {
 				log.info(project.getName());
-				saveOrUpdate(project);
+				saveOrUpdate(project, host);
 			}
 		}
 	}
 
-	void saveOrUpdate(Project project) {
+	void saveOrUpdate(Project project, String host) {
 		GlProject glProject = new GlProject();
 		glProject.setId(project.getId());
+		glProject.setHost(host);
 		glProject.setApprovalsBeforeMerge(project.getApprovalsBeforeMerge());
 		glProject.setArchived(project.getArchived());
 		glProject.setAvatarUrl(project.getAvatarUrl());
@@ -90,6 +99,7 @@ public class GitLabTests {
 
 		GlNamespace glNamespace = new GlNamespace();
 		glNamespace.setId(project.getNamespace().getId());
+		glNamespace.setHost(host);
 		glNamespace.setName(project.getNamespace().getName());
 		glNamespace.setPath(project.getNamespace().getPath());
 		glNamespace.setKind(project.getNamespace().getKind());

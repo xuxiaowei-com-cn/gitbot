@@ -1,10 +1,10 @@
 package cn.com.xuxiaowei.gitbot.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Data;
+
 import java.io.Serializable;
 import java.time.LocalDateTime;
-
-import lombok.Data;
 
 /**
  * <p>
@@ -21,6 +21,8 @@ public class GlProject implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Long id;
+
+	private String host;
 
 	private Integer approvalsBeforeMerge;
 

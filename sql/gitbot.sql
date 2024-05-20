@@ -11,7 +11,7 @@
  Target Server Version : 50736
  File Encoding         : 65001
 
- Date: 20/05/2024 15:22:32
+ Date: 20/05/2024 17:07:24
 */
 
 SET NAMES utf8mb4;
@@ -114,13 +114,14 @@ CREATE TABLE `gh_repository`  (
 -- ----------------------------
 CREATE TABLE `gl_namespace`  (
   `id` bigint(20) NOT NULL,
+  `host` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   `path` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   `kind` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   `full_path` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   `avatar_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   `web_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
+  PRIMARY KEY (`id`, `host`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
@@ -128,6 +129,7 @@ CREATE TABLE `gl_namespace`  (
 -- ----------------------------
 CREATE TABLE `gl_project`  (
   `id` bigint(20) NOT NULL,
+  `host` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `approvals_before_merge` int(11) NULL DEFAULT NULL,
   `archived` tinyint(1) NULL DEFAULT NULL,
   `avatar_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
@@ -139,7 +141,7 @@ CREATE TABLE `gl_project`  (
   `forks_count` int(11) NULL DEFAULT NULL,
   `forked_from_project_id` bigint(20) NULL DEFAULT NULL,
   `http_url_to_repo` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-  `is_public` bigint(1) NULL DEFAULT NULL,
+  `is_public` tinyint(1) NULL DEFAULT NULL,
   `issues_enabled` tinyint(1) NULL DEFAULT NULL,
   `jobs_enabled` tinyint(1) NULL DEFAULT NULL,
   `last_activity_at` datetime(0) NULL DEFAULT NULL,
@@ -197,7 +199,7 @@ CREATE TABLE `gl_project`  (
   `suggestion_commit_message` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   `squash_option` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   `marked_for_deletion_on` datetime(0) NULL DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
+  PRIMARY KEY (`id`, `host`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 SET FOREIGN_KEY_CHECKS = 1;
