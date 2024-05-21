@@ -7,57 +7,5 @@ variables:
   VERSION: 0.0.1-SNAPSHOT
   CI_JAVA_OPTS: -Xms256m -Xmx512m
 
-build:
-  stage: build
-  image: xuxiaoweicomcn/maven-mysql-client:3.6.3-openjdk-17
-  variables:
-    MAVEN_OPTS: >-
-      -Dhttps.protocols=TLSv1.2
-      -Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository
-      -Dorg.slf4j.simpleLogger.showDateTime=true
-      -Djava.awt.headless=true
-    MAVEN_CLI_OPTS: >-
-      --batch-mode
-      --errors
-      --fail-at-end
-      --show-version
-      --no-transfer-progress
-      -DinstallAtEnd=true
-      -DdeployAtEnd=true
-    GITBOT_DATABASE_HOST: mysql
-    GITBOT_DATABASE_USERNAME: root
-    GITBOT_DATABASE_PASSWORD: xuxiaowei.com.cn
-    GITBOT_DATABASE: gitbot
-    GITBOT_REDIS_HOST: redis
-    GITBOT_REDIS_PASSWORD: ""
-  services:
-    - name: mysql:8.3.0
-      alias: $GITBOT_DATABASE_HOST
-      variables:
-        MYSQL_ROOT_PASSWORD: $GITBOT_DATABASE_PASSWORD
-        MYSQL_DATABASE: $GITBOT_DATABASE
-    - name: redis:7.2.4
-      alias: $GITBOT_REDIS_HOST
-  before_script:
-    - if [ $CI_SERVER_HOST == 'gitlab.helm.xuxiaowei.cn' ]; then
-      sleep 20s;
-      fi
-    - mysql --version
-    - mysql -u ${GITBOT_DATABASE_USERNAME} -p${GITBOT_DATABASE_PASSWORD} --host=${GITBOT_DATABASE_HOST} ${GITBOT_DATABASE} < sql/init_config.sql
-    - mysql -u ${GITBOT_DATABASE_USERNAME} -p${GITBOT_DATABASE_PASSWORD} --host=${GITBOT_DATABASE_HOST} ${GITBOT_DATABASE} < sql/gitbot.sql
-  script:
-    - free -h || cat /proc/meminfo
-    - mvn -v
-    - mvn clean package -DskipTests=true -s settings.xml
-    - free -h || cat /proc/meminfo
-    - mvn test -DskipTests=false -s settings.xml
-  artifacts:
-    name: build
-    paths:
-      - gitbot/target/*.jar
-  cache:
-    key: "${CI_JOB_NAME}"
-    paths:
-      - .m2/repository
-  tags:
-    - jihulab
+include:
+  - local: .gitlab/ci/build.yml
