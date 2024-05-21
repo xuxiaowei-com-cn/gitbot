@@ -24,7 +24,7 @@ spring:
     redis:
       host: ${GITBOT_REDIS_HOST:127.0.0.1}
       port: ${GITBOT_REDIS_PORT:6379}
-      database: ${GITBOT_REDIS_DATABASE:8}
+      database: ${GITBOT_REDIS_DATABASE:10}
       password: ${GITBOT_REDIS_PASSWORD:xuxiaowei.com.cn}
 
 ---
