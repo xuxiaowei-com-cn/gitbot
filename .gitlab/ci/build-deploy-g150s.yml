@@ -5,6 +5,9 @@ build:deploy:g150s:
   image: ${CI_DEPENDENCY_PROXY_DIRECT_GROUP_IMAGE_PREFIX}/docker:cli
   variables:
     DOCKER_HOST: $DEPLOY_DOCKER_HOST
+  before_script:
+    - mkdir ~/.docker
+    - echo "{\"auths\":{\"${CI_REGISTRY}\":{\"auth\":\"$(printf "%s:%s" "${CI_REGISTRY_USER}" "${CI_REGISTRY_PASSWORD}" | base64 | tr -d '\n')\"},\"https://index.docker.io/v1/\":{\"auth\":\"$(printf "%s:%s" ${DOCKER_USERNAME} "${DOCKER_PASSWORD}" | base64 | tr -d '\n')\"}}}" > ~/.docker/config.json
   script:
     - docker info
     - docker compose up -d
