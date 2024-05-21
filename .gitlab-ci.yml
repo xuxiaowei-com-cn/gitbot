@@ -10,3 +10,4 @@ variables:
 include:
   - local: .gitlab/ci/build.yml
   - local: .gitlab/ci/build-docker.yml
+  - local: .gitlab/ci/build-deploy-g150s.yml

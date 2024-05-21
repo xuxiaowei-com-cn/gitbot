@@ -1,0 +1,22 @@
+services:
+  gitbot:
+    image: ${CI_REGISTRY_IMAGE}:${VERSION}-${CI_PIPELINE_ID}
+    restart: always
+    ports:
+      - ${GITBOT_PORT:-45950}:${GITBOT_PORT:-45950}
+    volumes:
+      - /gitbot/logs:/logs
+      - /gitbot/config:/config
+    environment:
+      - GITBOT_PORT=${GITBOT_PORT:-45950}
+      - GITBOT_REDIS_HOST=${GITBOT_REDIS_HOST:-127.0.0.1}
+      - GITBOT_REDIS_PORT=${GITBOT_REDIS_PORT:-6379}
+      - GITBOT_REDIS_DATABASE=${GITBOT_REDIS_DATABASE:-10}
+      - GITBOT_REDIS_PASSWORD=${GITBOT_REDIS_PASSWORD:-xuxiaowei.com.cn}
+      - GITBOT_DATABASE_HOST=${GITBOT_DATABASE_HOST:-127.0.0.1}
+      - GITBOT_DATABASE_PORT=${GITBOT_DATABASE_PORT:-3306}
+      - GITBOT_DATABASE=${GITBOT_DATABASE:-gitbot}
+      - GITBOT_DATABASE_USERNAME=${GITBOT_DATABASE_USERNAME:-root}
+      - GITBOT_DATABASE_PASSWORD=${GITBOT_DATABASE_PASSWORD:-xuxiaowei.com.cn}
+      - APP_ARGS=${GITBOT_APP_ARGS:-}
+    container_name: gitbot
