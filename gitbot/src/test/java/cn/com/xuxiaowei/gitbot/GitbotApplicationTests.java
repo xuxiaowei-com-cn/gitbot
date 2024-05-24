@@ -1,13 +1,9 @@
 package cn.com.xuxiaowei.gitbot;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+public class GitbotApplicationTests {
 
-@SpringBootTest
-class GitbotApplicationTests {
+	public static final String CLIENT_ID = "messaging-client";
 
-	@Test
-	void contextLoads() {
-	}
+	public static final String CLIENT_SECRET = "secret";
 
 }

@@ -82,8 +82,11 @@ jobs:
       - name: Init MySQL
         run: |
           mysql --version
-          mysql -u ${GITBOT_DATABASE_USERNAME} -p${GITBOT_DATABASE_PASSWORD} --host=${GITBOT_DATABASE_HOST} ${GITBOT_DATABASE} < sql/gitbot.sql
-          mysql -u ${GITBOT_DATABASE_USERNAME} -p${GITBOT_DATABASE_PASSWORD} --host=${GITBOT_DATABASE_HOST} ${GITBOT_DATABASE} < sql/init_config.sql
+          mysql -u ${GITBOT_DATABASE_USERNAME} -p${GITBOT_DATABASE_PASSWORD} --host=${GITBOT_DATABASE_HOST} ${GITBOT_DATABASE} < sql/1-security-mysql-schema.sql
+          mysql -u ${GITBOT_DATABASE_USERNAME} -p${GITBOT_DATABASE_PASSWORD} --host=${GITBOT_DATABASE_HOST} ${GITBOT_DATABASE} < sql/2-security-mysql-data.sql
+          mysql -u ${GITBOT_DATABASE_USERNAME} -p${GITBOT_DATABASE_PASSWORD} --host=${GITBOT_DATABASE_HOST} ${GITBOT_DATABASE} < sql/3-oauth-2.1-mysql-schema.sql
+          mysql -u ${GITBOT_DATABASE_USERNAME} -p${GITBOT_DATABASE_PASSWORD} --host=${GITBOT_DATABASE_HOST} ${GITBOT_DATABASE} < sql/4-oauth-2.1-mysql-data.sql
+          mysql -u ${GITBOT_DATABASE_USERNAME} -p${GITBOT_DATABASE_PASSWORD} --host=${GITBOT_DATABASE_HOST} ${GITBOT_DATABASE} < sql/5-gitbot-schema.sql
 
       - name: Build with Maven
         run: mvn clean package source:jar javadoc:jar -U -DskipTests=true
