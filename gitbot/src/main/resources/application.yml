@@ -57,7 +57,7 @@ springdoc:
       clientId: messaging-client
       clientSecret: secret
   oAuthFlow:
-    tokenUrl: ${GITBOT_SPRINGDOC_OAUTHFLOW_TOKEN_URL:http://127.0.0.1:${server.port:45950}/oauth2/token}
+    tokenUrl: ${GITBOT_SPRINGDOC_OAUTHFLOW_TOKEN_URL:http://127.0.0.1:45950/oauth2/token}
 
 ---
 
