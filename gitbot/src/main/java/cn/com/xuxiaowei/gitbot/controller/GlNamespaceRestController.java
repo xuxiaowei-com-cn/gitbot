@@ -1,6 +1,7 @@
 package cn.com.xuxiaowei.gitbot.controller;
 
 import cn.com.xuxiaowei.gitbot.bo.GlBO;
+import cn.com.xuxiaowei.gitbot.service.IGlNamespaceService;
 import cn.com.xuxiaowei.gitbot.utils.Response;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -9,9 +10,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
-import org.gitlab4j.api.GitLabApi;
 import org.gitlab4j.api.GitLabApiException;
 import org.gitlab4j.api.models.Namespace;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,6 +35,13 @@ import java.util.List;
 @RequestMapping("/gl/namespace")
 public class GlNamespaceRestController {
 
+	private IGlNamespaceService glNamespaceService;
+
+	@Autowired
+	public void setGlNamespaceService(IGlNamespaceService glNamespaceService) {
+		this.glNamespaceService = glNamespaceService;
+	}
+
 	/**
 	 * 列出命名空间
 	 * @param request 请求
@@ -41,23 +49,13 @@ public class GlNamespaceRestController {
 	 * @param glBO GitLab 参数
 	 * @return 返回 命名空间
 	 */
-	@Operation(summary = "列出命名空间", description = "https://docs.gitlab.cn/jh/api/namespaces.html")
+	@Operation(summary = "列出命名空间", description = "官方文档：https://docs.gitlab.cn/jh/api/namespaces.html")
 	@PostMapping("/list")
 	public Response<List<Namespace>> list(HttpServletRequest request, HttpServletResponse response,
-			@Valid @RequestBody GlBO glBO) {
-		try (GitLabApi gitLabApi = new GitLabApi(glBO.getHostUrl(), glBO.getPersonalAccessToken())) {
-			gitLabApi.setIgnoreCertificateErrors(true);
-			List<Namespace> namespaces = gitLabApi.getNamespaceApi().getNamespaces();
-			Response<List<Namespace>> ok = Response.ok();
-			return ok.setData(namespaces);
-		}
-		catch (GitLabApiException e) {
-			log.error("列出命名空间异常：", e);
-
-			int httpStatus = e.getHttpStatus();
-			String message = e.getMessage();
-			return Response.error(httpStatus, message);
-		}
+			@Valid @RequestBody GlBO glBO) throws GitLabApiException {
+		List<Namespace> namespaces = glNamespaceService.listNamespaces(glBO);
+		Response<List<Namespace>> ok = Response.ok();
+		return ok.setData(namespaces);
 	}
 
 }
