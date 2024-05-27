@@ -189,7 +189,7 @@ public class GitUtils {
 			command = new String[] { "cmd", "/c", "cd /d", folder, "&&", "git", "push", remoteName };
 		}
 		else {
-			command = new String[] { "sh", "/c", "cd /d", folder, "&&", "git", "add", remoteName };
+			command = new String[] { "sh", "/c", "cd /d", folder, "&&", "git", "push", remoteName };
 			charsetName = "UTF-8";
 		}
 
