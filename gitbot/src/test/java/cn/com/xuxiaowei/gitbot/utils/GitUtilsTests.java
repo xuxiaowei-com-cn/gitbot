@@ -26,4 +26,26 @@ class GitUtilsTests {
 		GitUtils.gitClone(url, username, token, branch, folder);
 	}
 
+	/**
+	 * 迁移
+	 */
+	// @Test
+	void transfer() {
+
+		String sourceUrl = "https://jihulab.com/xuxiaowei-jihu/xuxiaowei-com-cn/gitbot.git";
+		String sourceUsername = "";
+		String sourceToken = "";
+		String sourceBranch = "";
+		String folder = "";
+		String targetUrl = "https://gitlab.xuxiaowei.com.cn/xuxiaowei-com-cn/gitbot.git";
+		String targetUsername = "";
+		String targetToken = "";
+		String targetBranch = "";
+		boolean reserve = false;
+
+		GitUtils.transfer(sourceUrl, sourceUsername, sourceToken, sourceBranch, folder, targetUrl, targetUsername,
+				targetToken, targetBranch, reserve);
+
+	}
+
 }
