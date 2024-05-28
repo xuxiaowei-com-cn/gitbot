@@ -10,6 +10,25 @@ import java.io.IOException;
  */
 public class RuntimeUtils {
 
+	/**
+	 * @param command
+	 * @param charsetName
+	 * @return
+	 * @throws IOException
+	 * @throws InterruptedException
+	 */
+	public static CommandVo command(String command, String charsetName) throws IOException, InterruptedException {
+		Process process = Runtime.getRuntime().exec(command);
+
+		return CommandUtis.process(process, charsetName);
+	}
+
+	/**
+	 * @param command
+	 * @return
+	 * @throws IOException
+	 * @throws InterruptedException
+	 */
 	public static CommandVo command(String command) throws IOException, InterruptedException {
 		String os = System.getProperty("os.name").toLowerCase();
 		boolean isWindows = os.contains("windows");
@@ -22,9 +41,7 @@ public class RuntimeUtils {
 			charsetName = "UTF-8";
 		}
 
-		Process process = Runtime.getRuntime().exec(command);
-
-		return CommandUtis.process(process, charsetName);
+		return command(command, charsetName);
 	}
 
 }

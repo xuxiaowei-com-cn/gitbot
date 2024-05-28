@@ -10,6 +10,26 @@ import java.io.IOException;
  */
 public class ProcessBuilderUtils {
 
+	/**
+	 * @param command
+	 * @param charsetName
+	 * @return
+	 * @throws IOException
+	 * @throws InterruptedException
+	 */
+	public static CommandVo command(String[] command, String charsetName) throws IOException, InterruptedException {
+		ProcessBuilder builder = new ProcessBuilder(command);
+		Process process = builder.start();
+
+		return CommandUtis.process(process, charsetName);
+	}
+
+	/**
+	 * @param command
+	 * @return
+	 * @throws IOException
+	 * @throws InterruptedException
+	 */
 	public static CommandVo command(String[] command) throws IOException, InterruptedException {
 		String os = System.getProperty("os.name").toLowerCase();
 		boolean isWindows = os.contains("windows");
@@ -22,10 +42,7 @@ public class ProcessBuilderUtils {
 			charsetName = "UTF-8";
 		}
 
-		ProcessBuilder builder = new ProcessBuilder(command);
-		Process process = builder.start();
-
-		return CommandUtis.process(process, charsetName);
+		return command(command, charsetName);
 	}
 
 }
