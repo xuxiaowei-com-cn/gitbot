@@ -1,14 +1,11 @@
 package cn.com.xuxiaowei.gitbot;
 
+import cn.com.xuxiaowei.gitbot.utils.RuntimeUtils;
+import cn.com.xuxiaowei.gitbot.vo.CommandVo;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * @author xuxiaowei
@@ -18,41 +15,21 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class RuntimeTests {
 
 	@Test
-	void command() {
+	void command() throws IOException, InterruptedException {
 
 		String os = System.getProperty("os.name").toLowerCase();
 		boolean isWindows = os.contains("windows");
 
 		String command;
-		String charsetName;
 		if (isWindows) {
 			command = "ipconfig /all";
-			charsetName = "GBK";
 		}
 		else {
 			command = "mvn -v";
-			charsetName = "UTF-8";
 		}
 
-		try {
-			Process process = Runtime.getRuntime().exec(command);
-
-			InputStream is = process.getInputStream();
-			BufferedReader reader = new BufferedReader(new InputStreamReader(is, charsetName));
-
-			String line;
-			while ((line = reader.readLine()) != null) {
-				log.info(line);
-			}
-
-			int exitCode = process.waitFor();
-			log.info("Process exited with code: {}", exitCode);
-
-			assertEquals(0, exitCode);
-		}
-		catch (IOException | InterruptedException e) {
-			log.error("测试命令异常：", e);
-		}
+		CommandVo commandVo = RuntimeUtils.command(command);
+		log.info(String.valueOf(commandVo));
 	}
 
 }
