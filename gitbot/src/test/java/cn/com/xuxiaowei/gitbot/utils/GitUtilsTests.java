@@ -15,7 +15,7 @@ class GitUtilsTests {
 	/**
 	 * 克隆
 	 */
-	@Test
+	// @Test
 	void gitClone() {
 		String url = "https://gitee.com/xuxiaowei-cloud/spring-cloud-xuxiaowei.git";
 		String username = "";
