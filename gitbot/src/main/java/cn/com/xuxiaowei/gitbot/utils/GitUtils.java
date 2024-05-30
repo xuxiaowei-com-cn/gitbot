@@ -1,12 +1,11 @@
 package cn.com.xuxiaowei.gitbot.utils;
 
+import cn.com.xuxiaowei.gitbot.vo.CommandVo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.StringUtils;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 /**
@@ -20,20 +19,15 @@ public class GitUtils {
 
 	/**
 	 * 克隆
+	 * @param gitexe
 	 * @param url
 	 * @param username
 	 * @param token
 	 * @param branch
 	 * @param folder
 	 */
-	public static String gitClone(String url, String username, String token, String branch, String folder) {
-
-		if (StringUtils.hasText(username) && StringUtils.hasText(token)) {
-			url = UriComponentsBuilder.fromHttpUrl(url).userInfo(username + ":" + token).build().toString();
-		}
-
-		String os = System.getProperty("os.name").toLowerCase();
-		boolean isWindows = os.contains("windows");
+	public static CommandVo gitClone(String gitexe, String url, String username, String token, String branch,
+			String folder) throws IOException, InterruptedException {
 
 		String tempDir = System.getProperty("java.io.tmpdir");
 		log.debug("用户临时文件夹：{}", tempDir);
@@ -45,7 +39,7 @@ public class GitUtils {
 				throw new GitbotRuntimeException("文件夹不合法");
 			}
 			else {
-				uriComponentsBuilder.path(folder);
+				uriComponentsBuilder.path("/").path(folder);
 			}
 		}
 
@@ -53,62 +47,13 @@ public class GitUtils {
 
 		String tmp = uriComponentsBuilder.path("/").path(uuid).build().toString();
 
-		List<String> commandList = new ArrayList<>();
-		commandList.add("git");
-		commandList.add("clone");
-		commandList.add("-v");
-		if (StringUtils.hasText(branch)) {
-			commandList.add("-b");
-			commandList.add(branch);
-		}
-		commandList.add(url);
-		commandList.add(tmp);
+		String[] command = new String[] { gitexe, "mix-export", "single", "-url=" + url, "-folder=" + tmp,
+				"-username=" + username, "-token=" + token, "--track=true" };
 
-		String[] command = commandList.toArray(new String[0]);
+		CommandVo commandVo = ProcessBuilderUtils.command(command, "UTF-8");
+		commandVo.setTmp(tmp);
 
-		String charsetName;
-		if (isWindows) {
-			charsetName = "GBK";
-		}
-		else {
-			charsetName = "UTF-8";
-		}
-
-		try {
-			ProcessBuilder builder = new ProcessBuilder(command);
-			Process process = builder.start();
-
-			InputStream is = process.getInputStream();
-			BufferedReader reader = new BufferedReader(new InputStreamReader(is, charsetName));
-
-			StringBuilder sb = new StringBuilder();
-			String line;
-			while ((line = reader.readLine()) != null) {
-				sb.append(line);
-			}
-
-			String string = sb.toString();
-
-			log.debug("克隆日志：{}", string);
-
-			int exitCode = process.waitFor();
-			log.info("Process exited with code: {}", exitCode);
-
-			if (exitCode == 0) {
-				log.info("克隆成功");
-			}
-			else if (exitCode == 128) {
-				throw new GitbotRuntimeException(String.format("仓库、分支不存在或凭证不正确，克隆异常代码：%s，异常日志：%s", exitCode, string));
-			}
-			else {
-				throw new GitbotRuntimeException(String.format("克隆异常代码：%s，异常日志：%s", exitCode, string));
-			}
-		}
-		catch (IOException | InterruptedException e) {
-			throw new GitbotRuntimeException("克隆代码异常", e);
-		}
-
-		return tmp;
+		return commandVo;
 	}
 
 	/**
@@ -128,14 +73,12 @@ public class GitUtils {
 		String os = System.getProperty("os.name").toLowerCase();
 		boolean isWindows = os.contains("windows");
 
-		String[] command;
+		String[] command = new String[] { "git", "-C", folder, "remote", "add", remoteName, url };
 		String charsetName;
 		if (isWindows) {
 			charsetName = "GBK";
-			command = new String[] { "cmd", "/c", "cd /d", folder, "&&", "git", "remote", "add", remoteName, url };
 		}
 		else {
-			command = new String[] { "sh", "/c", "cd /d", folder, "&&", "git", "remote", "add", remoteName, url };
 			charsetName = "UTF-8";
 		}
 
@@ -182,14 +125,12 @@ public class GitUtils {
 		String os = System.getProperty("os.name").toLowerCase();
 		boolean isWindows = os.contains("windows");
 
-		String[] command;
+		String[] command = new String[] { "git", "-C", folder, "push", remoteName };
 		String charsetName;
 		if (isWindows) {
 			charsetName = "GBK";
-			command = new String[] { "cmd", "/c", "cd /d", folder, "&&", "git", "push", remoteName };
 		}
 		else {
-			command = new String[] { "sh", "/c", "cd /d", folder, "&&", "git", "push", remoteName };
 			charsetName = "UTF-8";
 		}
 
@@ -228,6 +169,7 @@ public class GitUtils {
 
 	/**
 	 * 迁移
+	 * @param gitexe
 	 * @param sourceUrl
 	 * @param sourceUsername
 	 * @param sourceToken
@@ -239,11 +181,13 @@ public class GitUtils {
 	 * @param targetBranch
 	 * @param reserve
 	 */
-	public static void transfer(String sourceUrl, String sourceUsername, String sourceToken, String sourceBranch,
-			String folder, String targetUrl, String targetUsername, String targetToken, String targetBranch,
-			boolean reserve) {
+	public static void transfer(String gitexe, String sourceUrl, String sourceUsername, String sourceToken,
+			String sourceBranch, String folder, String targetUrl, String targetUsername, String targetToken,
+			String targetBranch, boolean reserve) throws IOException, InterruptedException {
 
-		String tmp = gitClone(sourceUrl, sourceUsername, sourceToken, sourceBranch, folder);
+		CommandVo commandVo = gitClone(gitexe, sourceUrl, sourceUsername, sourceToken, sourceBranch, folder);
+
+		String tmp = commandVo.getTmp();
 
 		String remoteName = UUID.randomUUID().toString().substring(0, 4);
 

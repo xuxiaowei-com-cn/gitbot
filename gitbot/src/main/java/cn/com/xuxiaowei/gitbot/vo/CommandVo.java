@@ -13,4 +13,6 @@ public class CommandVo {
 
 	private String message;
 
+	private String tmp;
+
 }

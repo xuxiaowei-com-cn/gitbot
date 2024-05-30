@@ -1,7 +1,10 @@
 package cn.com.xuxiaowei.gitbot.utils;
 
+import cn.com.xuxiaowei.gitbot.vo.CommandVo;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
+
+import java.io.IOException;
 
 /**
  * Git 测试类
@@ -16,21 +19,22 @@ class GitUtilsTests {
 	 * 克隆
 	 */
 	// @Test
-	void gitClone() {
+	void gitClone() throws IOException, InterruptedException {
 		String url = "https://gitee.com/xuxiaowei-cloud/spring-cloud-xuxiaowei.git";
 		String username = "";
 		String token = "";
 		String branch = "";
 		String folder = "spring-cloud-xuxiaowei-2";
 
-		GitUtils.gitClone(url, username, token, branch, folder);
+		CommandVo commandVo = GitUtils.gitClone("gitlab-go", url, username, token, branch, folder);
+		log.info(String.valueOf(commandVo));
 	}
 
 	/**
 	 * 迁移
 	 */
 	// @Test
-	void transfer() {
+	void transfer() throws IOException, InterruptedException {
 
 		String sourceUrl = "https://jihulab.com/xuxiaowei-jihu/xuxiaowei-com-cn/gitbot.git";
 		String sourceUsername = "";
@@ -43,8 +47,8 @@ class GitUtilsTests {
 		String targetBranch = "";
 		boolean reserve = false;
 
-		GitUtils.transfer(sourceUrl, sourceUsername, sourceToken, sourceBranch, folder, targetUrl, targetUsername,
-				targetToken, targetBranch, reserve);
+		GitUtils.transfer("gitexe", sourceUrl, sourceUsername, sourceToken, sourceBranch, folder, targetUrl,
+				targetUsername, targetToken, targetBranch, reserve);
 
 	}
 
