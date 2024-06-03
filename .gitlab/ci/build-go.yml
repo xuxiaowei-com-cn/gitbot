@@ -1,4 +1,4 @@
-build:
+build:go:
   stage: build:go
   image: golang:1.21
   variables:
