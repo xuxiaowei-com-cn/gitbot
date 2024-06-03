@@ -1,5 +1,5 @@
 build:
-  stage: build
+  stage: build:java
   image: xuxiaoweicomcn/maven-mysql-client:3.6.3-openjdk-17
   variables:
     MAVEN_OPTS: >-
@@ -47,7 +47,8 @@ build:
     - free -h || cat /proc/meminfo
     - mvn test -DskipTests=false -s settings.xml
   artifacts:
-    name: build
+    name: build-java
+    expire_in: 3 day
     paths:
       - gitbot/target/*.jar
   cache:

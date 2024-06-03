@@ -1,5 +1,8 @@
 stages:
-  - build
+  - build:go
+  - build:java
+  - build:docker
+  - build:deploy
 
 variables:
   GROUP_ID: cn.com.xuxiaowei.gitbot
@@ -8,6 +11,7 @@ variables:
   CI_JAVA_OPTS: -Xms256m -Xmx512m
 
 include:
-  - local: .gitlab/ci/build.yml
+  - local: .gitlab/ci/build-go.yml
+  - local: .gitlab/ci/build-java.yml
   - local: .gitlab/ci/build-docker.yml
   - local: .gitlab/ci/build-deploy-g150s.yml
