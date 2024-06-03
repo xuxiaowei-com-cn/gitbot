@@ -120,12 +120,64 @@ public class GitUtils {
 	 * @param folder
 	 * @param remoteName
 	 */
-	public static void gitPush(String folder, String remoteName) {
+	public static void gitPushAll(String folder, String remoteName) {
 
 		String os = System.getProperty("os.name").toLowerCase();
 		boolean isWindows = os.contains("windows");
 
-		String[] command = new String[] { "git", "-C", folder, "push", remoteName };
+		String[] command = new String[] { "git", "-C", folder, "push", remoteName, "--all" };
+		String charsetName;
+		if (isWindows) {
+			charsetName = "GBK";
+		}
+		else {
+			charsetName = "UTF-8";
+		}
+
+		try {
+			ProcessBuilder builder = new ProcessBuilder(command);
+			Process process = builder.start();
+
+			InputStream is = process.getInputStream();
+			BufferedReader reader = new BufferedReader(new InputStreamReader(is, charsetName));
+
+			StringBuilder sb = new StringBuilder();
+			String line;
+			while ((line = reader.readLine()) != null) {
+				sb.append(line);
+			}
+
+			String string = sb.toString();
+
+			log.debug("推送远端日志：{}", string);
+
+			int exitCode = process.waitFor();
+			log.info("Process exited with code: {}", exitCode);
+
+			if (exitCode == 0) {
+				log.info("推送远端成功");
+			}
+			else {
+				throw new GitbotRuntimeException(String.format("推送远端异常代码：%s，异常日志：%s", exitCode, string));
+			}
+		}
+		catch (IOException | InterruptedException e) {
+			throw new GitbotRuntimeException("推送远端异常", e);
+		}
+
+	}
+
+	/**
+	 * 推送远端
+	 * @param folder
+	 * @param remoteName
+	 */
+	public static void gitPushTags(String folder, String remoteName) {
+
+		String os = System.getProperty("os.name").toLowerCase();
+		boolean isWindows = os.contains("windows");
+
+		String[] command = new String[] { "git", "-C", folder, "push", remoteName, "--tags" };
 		String charsetName;
 		if (isWindows) {
 			charsetName = "GBK";
@@ -178,12 +230,11 @@ public class GitUtils {
 	 * @param targetUrl
 	 * @param targetUsername
 	 * @param targetToken
-	 * @param targetBranch
 	 * @param reserve
 	 */
 	public static void transfer(String gitexe, String sourceUrl, String sourceUsername, String sourceToken,
 			String sourceBranch, String folder, String targetUrl, String targetUsername, String targetToken,
-			String targetBranch, boolean reserve) throws IOException, InterruptedException {
+			boolean reserve) throws IOException, InterruptedException {
 
 		CommandVo commandVo = gitClone(gitexe, sourceUrl, sourceUsername, sourceToken, sourceBranch, folder);
 
@@ -193,7 +244,8 @@ public class GitUtils {
 
 		addRemote(remoteName, targetUrl, targetUsername, targetToken, tmp);
 
-		gitPush(tmp, remoteName);
+		gitPushAll(tmp, remoteName);
+		gitPushTags(tmp, remoteName);
 
 		if (!reserve) {
 			deleteFolder(new File(tmp));

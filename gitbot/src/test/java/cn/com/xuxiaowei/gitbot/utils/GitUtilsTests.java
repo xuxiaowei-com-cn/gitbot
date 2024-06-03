@@ -1,10 +1,14 @@
 package cn.com.xuxiaowei.gitbot.utils;
 
-import cn.com.xuxiaowei.gitbot.vo.CommandVo;
+import cn.com.xuxiaowei.gitbot.entity.GlProject;
+import cn.com.xuxiaowei.gitbot.service.IGlProjectService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * Git 测试类
@@ -13,7 +17,11 @@ import java.io.IOException;
  * @since 0.0.1
  */
 @Slf4j
+@SpringBootTest
 class GitUtilsTests {
+
+	@Autowired
+	private IGlProjectService glProjectService;
 
 	/**
 	 * 克隆
@@ -26,29 +34,47 @@ class GitUtilsTests {
 		String branch = "";
 		String folder = "spring-cloud-xuxiaowei-2";
 
-		CommandVo commandVo = GitUtils.gitClone("gitlab-go", url, username, token, branch, folder);
-		log.info(String.valueOf(commandVo));
+		GitUtils.gitClone("gitlab-go", url, username, token, branch, folder);
 	}
 
-	/**
-	 * 迁移
-	 */
 	// @Test
 	void transfer() throws IOException, InterruptedException {
 
-		String sourceUrl = "https://jihulab.com/xuxiaowei-jihu/xuxiaowei-com-cn/gitbot.git";
-		String sourceUsername = "";
-		String sourceToken = "";
-		String sourceBranch = "";
-		String folder = "";
-		String targetUrl = "https://gitlab.xuxiaowei.com.cn/xuxiaowei-com-cn/gitbot.git";
-		String targetUsername = "";
-		String targetToken = "";
-		String targetBranch = "";
-		boolean reserve = false;
+		List<GlProject> list = glProjectService.list();
+		int size = list.size();
 
-		GitUtils.transfer("gitexe", sourceUrl, sourceUsername, sourceToken, sourceBranch, folder, targetUrl,
-				targetUsername, targetToken, targetBranch, reserve);
+		for (int i = 0; i < size; i++) {
+			GlProject project = list.get(i);
+
+			String sourceUrl = project.getHttpUrlToRepo();
+
+			log.info("{}: {}: {}", size, i, sourceUrl);
+
+			if (i < 137) {
+				continue;
+			}
+
+			if (sourceUrl.contains("xuxiaowei-com-cn/nexus")) {
+				continue;
+			}
+
+			if (sourceUrl.contains("https://jihulab.com/xuxiaowei-jihu/custom-roles-test.git")) {
+				continue;
+			}
+
+			String sourceUsername = "xuxiaowei-com-cn";
+			String sourceToken = "";
+			String sourceBranch = "";
+			String folder = "";
+			String targetUrl = sourceUrl
+				.replace("https://jihulab.com/xuxiaowei-jihu", "https://gitlab.xuxiaowei.com.cn")
+				.replace("https://jihulab.com", "https://gitlab.xuxiaowei.com.cn");
+			String targetUsername = "xuxiaowei-com-cn";
+			String targetToken = "";
+			boolean reserve = false;
+			GitUtils.transfer("gitlab-go", sourceUrl, sourceUsername, sourceToken, sourceBranch, folder, targetUrl,
+					targetUsername, targetToken, reserve);
+		}
 
 	}
 
