@@ -27,6 +27,6 @@ build:go:
     name: build-go
     expire_in: 3 day
     paths:
-      - gitbot-go-*
+      - gitbot-go/gitbot-go-*
   tags:
     - jihulab
