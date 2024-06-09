@@ -31,7 +31,7 @@
         <springdoc.version>2.5.0</springdoc.version>
         <therapi-runtime-javadoc-scribe.version>0.15.0</therapi-runtime-javadoc-scribe.version>
         <therapi-runtime-javadoc.version>0.15.0</therapi-runtime-javadoc.version>
-        <spring-javaformat-maven-plugin.version>0.0.41</spring-javaformat-maven-plugin.version>
+        <spring-javaformat-maven-plugin.version>0.0.42</spring-javaformat-maven-plugin.version>
         <skipTests>true</skipTests>
     </properties>
 
