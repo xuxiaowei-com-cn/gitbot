@@ -22,12 +22,12 @@ build:java:
     GITBOT_REDIS_HOST: redis
     GITBOT_REDIS_PASSWORD: ""
   services:
-    - name: mysql:8.3.0
+    - name: registry.cn-qingdao.aliyuncs.com/xuxiaoweicomcn/mysql:8.3.0
       alias: $GITBOT_DATABASE_HOST
       variables:
         MYSQL_ROOT_PASSWORD: $GITBOT_DATABASE_PASSWORD
         MYSQL_DATABASE: $GITBOT_DATABASE
-    - name: redis:7.2.4
+    - name: registry.cn-qingdao.aliyuncs.com/xuxiaoweicomcn/redis:7.2.4
       alias: $GITBOT_REDIS_HOST
   before_script:
     - if [ $CI_SERVER_HOST == 'gitlab.helm.xuxiaowei.cn' ]; then
