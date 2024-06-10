@@ -1,6 +1,6 @@
 build:java:
   stage: build:java
-  image: xuxiaoweicomcn/maven-mysql-client:3.6.3-openjdk-17
+  image: registry.cn-qingdao.aliyuncs.com/xuxiaoweicomcn/maven-mysql-client:3.6.3-openjdk-17
   variables:
     MAVEN_OPTS: >-
       -Dhttps.protocols=TLSv1.2
