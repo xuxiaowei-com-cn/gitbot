@@ -4,6 +4,7 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "pre:npm": "npm install --registry https://registry.npmmirror.com || npm install --registry https://registry.npmjs.org",
     "dev": "vite",
     "build": "run-p type-check \"build-only {@}\" --",
     "preview": "vite preview",
