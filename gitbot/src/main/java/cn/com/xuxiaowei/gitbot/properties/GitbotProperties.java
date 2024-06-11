@@ -22,7 +22,7 @@ public class GitbotProperties {
 
 	private String title;
 
-	private String gitexe;
+	private String cmd;
 
 	/**
 	 * RSA 公钥

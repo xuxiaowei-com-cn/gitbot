@@ -34,7 +34,7 @@ class GitUtilsTests {
 		String branch = "";
 		String folder = "spring-cloud-xuxiaowei-2";
 
-		GitUtils.gitClone("gitlab-go", url, username, token, branch, folder);
+		GitUtils.gitClone("gitbot-go", url, username, token, branch, folder);
 	}
 
 	// @Test
@@ -72,7 +72,7 @@ class GitUtilsTests {
 			String targetUsername = "xuxiaowei-com-cn";
 			String targetToken = "";
 			boolean reserve = false;
-			GitUtils.transfer("gitlab-go", sourceUrl, sourceUsername, sourceToken, sourceBranch, folder, targetUrl,
+			GitUtils.transfer("gitbot-go", sourceUrl, sourceUsername, sourceToken, sourceBranch, folder, targetUrl,
 					targetUsername, targetToken, reserve);
 		}
 
