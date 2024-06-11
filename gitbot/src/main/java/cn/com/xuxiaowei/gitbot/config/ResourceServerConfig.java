@@ -5,8 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcOperations;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.server.authorization.JdbcOAuth2AuthorizationConsentService;
 import org.springframework.security.oauth2.server.authorization.JdbcOAuth2AuthorizationService;
@@ -67,7 +67,9 @@ public class ResourceServerConfig {
 
 		});
 
-		http.formLogin(Customizer.withDefaults());
+		// http.formLogin(Customizer.withDefaults());
+		http.formLogin(AbstractHttpConfigurer::disable);
+		http.csrf(AbstractHttpConfigurer::disable);
 
 		http.oauth2ResourceServer(customizer -> {
 			customizer.jwt(jwtCustomizer -> {
