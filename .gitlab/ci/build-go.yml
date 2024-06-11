@@ -28,5 +28,8 @@ build:go:
     expire_in: 3 day
     paths:
       - gitbot-go/gitbot-go-*
+  only:
+    variables:
+      - $BUILD_GO == "true"
   tags:
     - jihulab
