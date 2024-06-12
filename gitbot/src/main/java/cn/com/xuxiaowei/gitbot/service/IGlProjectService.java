@@ -1,12 +1,10 @@
 package cn.com.xuxiaowei.gitbot.service;
 
-import cn.com.xuxiaowei.gitbot.bo.GlBO;
 import cn.com.xuxiaowei.gitbot.entity.GlProject;
 import com.baomidou.mybatisplus.extension.service.IService;
 import org.gitlab4j.api.GitLabApiException;
-import org.gitlab4j.api.models.Project;
 
-import java.util.List;
+import java.net.MalformedURLException;
 
 /**
  * <p>
@@ -18,10 +16,7 @@ import java.util.List;
  */
 public interface IGlProjectService extends IService<GlProject> {
 
-	GlProject getByPrimaryKey(Long id, String host);
-
-	boolean updateBatch(List<GlProject> glProjectList);
-
-	List<Project> listProjects(GlBO glBO) throws GitLabApiException;
+	void saveOwnedProject(String hostUrl, boolean ignoreCertificateErrors, String personalAccessToken)
+			throws GitLabApiException, MalformedURLException;
 
 }

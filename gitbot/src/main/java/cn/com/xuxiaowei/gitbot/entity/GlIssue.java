@@ -2,14 +2,14 @@ package cn.com.xuxiaowei.gitbot.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
-import org.gitlab4j.api.models.Duration;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 /**
  * <p>
- * 
+ *
  * </p>
  *
  * @author xuxiaowei
@@ -32,8 +32,6 @@ public class GlIssue implements Serializable {
 	private Boolean subscribed;
 
 	private Long assigneeId;
-
-	private String assignees;
 
 	private Long authorId;
 
@@ -75,9 +73,9 @@ public class GlIssue implements Serializable {
 
 	private Integer totalTimeSpent;
 
-	private Duration humanTimeEstimate;
+	private Integer humanTimeEstimate;
 
-	private Duration humanTotalTimeSpent;
+	private Integer humanTotalTimeSpent;
 
 	private Integer upvotes;
 

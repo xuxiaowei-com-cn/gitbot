@@ -1,7 +1,7 @@
 package cn.com.xuxiaowei.gitbot.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * <p>
@@ -9,10 +9,10 @@ import org.springframework.stereotype.Controller;
  * </p>
  *
  * @author xuxiaowei
- * @since 2024-05-20
+ * @since 2024-06-12
  */
-@Controller
-@RequestMapping("/ghPullRequest")
-public class GhPullRequestController {
+@RestController
+@RequestMapping("/gh/repository")
+public class GhRepositoryRestController {
 
 }

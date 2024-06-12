@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @since 2024-06-12
  */
 @RestController
-@RequestMapping("/gl/note")
-public class GlNoteRestController {
+@RequestMapping("/gh/pull-request")
+public class GhPullRequestRestController {
 
 }

@@ -11,7 +11,7 @@
  Target Server Version : 50736
  File Encoding         : 65001
 
- Date: 20/05/2024 17:07:24
+ Date: 12/06/2024 20:41:12
 */
 
 SET NAMES utf8mb4;
@@ -110,6 +110,114 @@ CREATE TABLE `gh_repository`  (
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
+-- Table structure for gl_branch
+-- ----------------------------
+CREATE TABLE `gl_branch`  (
+  `project_id` bigint(20) NOT NULL,
+  `host` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `developers_can_merge` tinyint(1) NULL DEFAULT NULL,
+  `developers_can_push` tinyint(1) NULL DEFAULT NULL,
+  `merged` tinyint(1) NULL DEFAULT NULL,
+  `is_protected` tinyint(1) NULL DEFAULT NULL,
+  `is_default` tinyint(1) NULL DEFAULT NULL,
+  `can_push` tinyint(1) NULL DEFAULT NULL,
+  `web_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `commit_author` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `commit_authored_date` datetime(0) NULL DEFAULT NULL,
+  `commit_author_email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `commit_author_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `commit_committed_date` datetime(0) NULL DEFAULT NULL,
+  `commit_committer_email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `commit_committer_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `commit_created_at` datetime(0) NULL DEFAULT NULL,
+  `commit_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `commit_message` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL,
+  `commit_parent_ids` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `commit_short_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `commit_stats` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `commit_status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `commit_timestamp` datetime(0) NULL DEFAULT NULL,
+  `commit_title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `commit_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `commit_web_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `commit_project_id` bigint(20) NULL DEFAULT NULL,
+  `commit_last_pipeline_id` bigint(20) NULL DEFAULT NULL,
+  `commit_last_pipeline_iid` bigint(20) NULL DEFAULT NULL,
+  PRIMARY KEY (`project_id`, `host`, `name`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for gl_commit
+-- ----------------------------
+CREATE TABLE `gl_commit`  (
+  `id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `host` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `branch_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `authored_date` datetime(0) NULL DEFAULT NULL,
+  `author_email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `author_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `committed_date` datetime(0) NULL DEFAULT NULL,
+  `committer_email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `committer_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `created_at` datetime(0) NULL DEFAULT NULL,
+  `message` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL,
+  `short_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `timestamp` datetime(0) NULL DEFAULT NULL,
+  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `web_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `project_id` bigint(20) NULL DEFAULT NULL,
+  `last_pipeline_id` bigint(20) NULL DEFAULT NULL,
+  `last_pipeline_iid` bigint(20) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`, `host`, `branch_name`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for gl_issue
+-- ----------------------------
+CREATE TABLE `gl_issue`  (
+  `id` bigint(20) NOT NULL,
+  `host` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `project_id` bigint(20) NOT NULL,
+  `iid` bigint(20) NOT NULL,
+  `subscribed` tinyint(1) NULL DEFAULT NULL,
+  `assignee_id` bigint(20) NULL DEFAULT NULL,
+  `author_id` bigint(20) NULL DEFAULT NULL,
+  `confidential` tinyint(1) NULL DEFAULT NULL,
+  `created_at` datetime(0) NULL DEFAULT NULL,
+  `updated_at` datetime(0) NULL DEFAULT NULL,
+  `closed_at` datetime(0) NULL DEFAULT NULL,
+  `closed_by` bigint(20) NULL DEFAULT NULL,
+  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL,
+  `due_date` datetime(0) NULL DEFAULT NULL,
+  `actual_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `external_id` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `labels` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `milestone_id` bigint(20) NULL DEFAULT NULL,
+  `state` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `user_notes_count` int(11) NULL DEFAULT NULL,
+  `web_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `weight` int(11) NULL DEFAULT NULL,
+  `discussion_locked` tinyint(1) NULL DEFAULT NULL,
+  `time_estimate` int(11) NULL DEFAULT NULL,
+  `total_time_spent` int(11) NULL DEFAULT NULL,
+  `human_time_estimate` int(0) NULL DEFAULT NULL,
+  `human_total_time_spent` int(0) NULL DEFAULT NULL,
+  `upvotes` int(11) NULL DEFAULT NULL,
+  `downvotes` int(11) NULL DEFAULT NULL,
+  `merge_requests_count` int(11) NULL DEFAULT NULL,
+  `has_tasks` tinyint(1) NULL DEFAULT NULL,
+  `task_status` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `iteration_id` bigint(20) NULL DEFAULT NULL,
+  `task_completion_status_count` int(11) NULL DEFAULT NULL,
+  `task_completion_status_completed_count` int(11) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`, `host`, `project_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
 -- Table structure for gl_namespace
 -- ----------------------------
 CREATE TABLE `gl_namespace`  (
@@ -122,6 +230,38 @@ CREATE TABLE `gl_namespace`  (
   `avatar_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   `web_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`id`, `host`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Table structure for gl_note
+-- ----------------------------
+CREATE TABLE `gl_note`  (
+  `id` bigint(20) NOT NULL,
+  `host` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `project_id` bigint(20) NOT NULL,
+  `issue_id` bigint(20) NOT NULL,
+  `issue_iid` bigint(20) NOT NULL,
+  `attachment` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `author_id` bigint(20) NULL DEFAULT NULL,
+  `body` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL,
+  `created_at` datetime(0) NULL DEFAULT NULL,
+  `downvote` tinyint(1) NULL DEFAULT NULL,
+  `expires_at` datetime(0) NULL DEFAULT NULL,
+  `file_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `noteable_id` bigint(20) NULL DEFAULT NULL,
+  `noteable_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `noteable_iid` bigint(20) NULL DEFAULT NULL,
+  `system` tinyint(1) NULL DEFAULT NULL,
+  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `updated_at` datetime(0) NULL DEFAULT NULL,
+  `upvote` tinyint(1) NULL DEFAULT NULL,
+  `resolved` tinyint(1) NULL DEFAULT NULL,
+  `resolvable` tinyint(1) NULL DEFAULT NULL,
+  `resolved_by` bigint(20) NULL DEFAULT NULL,
+  `resolved_at` datetime(0) NULL DEFAULT NULL,
+  `internal` tinyint(1) NULL DEFAULT NULL,
+  `type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`id`, `host`, `project_id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------

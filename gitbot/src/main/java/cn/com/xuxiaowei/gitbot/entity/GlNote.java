@@ -72,6 +72,4 @@ public class GlNote implements Serializable {
 
 	private String type;
 
-	private String position;
-
 }

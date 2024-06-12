@@ -17,7 +17,7 @@ import java.util.List;
 class CodeGeneratorTests {
 
 	public static void main(String[] args) {
-		// interactiveGenerator();
+		interactiveGenerator();
 		// staticGenerator();
 	}
 
@@ -61,10 +61,20 @@ class CodeGeneratorTests {
 		// @formatter:off
 		FastAutoGenerator.create(url, username, password)
 				// 全局配置
-				.globalConfig((scanner, builder) -> builder.author(scanner.apply("请输入作者名称？")))
+				.globalConfig(builder -> builder
+						.author("xuxiaowei")
+						.outputDir(Paths.get(System.getProperty("user.dir")) + "/gitbot/src/main/java")
+						.commentDate("yyyy-MM-dd")
+				)
 				// 包配置
-				// .packageConfig((scanner, builder) -> builder.parent(scanner.apply("请输入包名？")))
-				.packageConfig((scanner, builder) -> builder.parent(Paths.get(System.getProperty("user.dir")) + "/src/main/java"))
+				.packageConfig(builder -> builder
+						.parent("cn.com.xuxiaowei.gitbot")
+						.entity("entity")
+						.mapper("mapper")
+						.service("service")
+						.serviceImpl("service.impl")
+						.xml("mapper.xml")
+				)
 				// 策略配置
 				.strategyConfig((scanner, builder) -> builder.addInclude(getTables(scanner.apply("请输入表名，多个英文逗号分隔？所有输入 all")))
 						.entityBuilder()

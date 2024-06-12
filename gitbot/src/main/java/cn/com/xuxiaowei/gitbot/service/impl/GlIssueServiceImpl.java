@@ -95,8 +95,8 @@ public class GlIssueServiceImpl extends ServiceImpl<GlIssueMapper, GlIssue> impl
 				glIssue.setDiscussionLocked(issue.getDiscussionLocked());
 				glIssue.setTimeEstimate(issue.getTimeStats().getTimeEstimate());
 				glIssue.setTotalTimeSpent(issue.getTimeStats().getTotalTimeSpent());
-				glIssue.setHumanTimeEstimate(issue.getTimeStats().getHumanTimeEstimate());
-				glIssue.setHumanTotalTimeSpent(issue.getTimeStats().getHumanTotalTimeSpent());
+				glIssue.setHumanTimeEstimate(issue.getTimeStats().getHumanTimeEstimate() == null ? null : issue.getTimeStats().getHumanTimeEstimate().getSeconds());
+				glIssue.setHumanTotalTimeSpent(issue.getTimeStats().getHumanTotalTimeSpent() == null ? null : issue.getTimeStats().getHumanTotalTimeSpent().getSeconds());
 				glIssue.setUpvotes(issue.getUpvotes());
 				glIssue.setDownvotes(issue.getDownvotes());
 				glIssue.setMergeRequestsCount(issue.getMergeRequestsCount());
