@@ -65,6 +65,7 @@ springdoc:
 logging:
   level:
     cn.com.xuxiaowei: debug
+    org.springframework.web: debug
     # 当前应用响应数据
     org.springframework.core.codec.CharSequenceEncoder: debug
   pattern:
