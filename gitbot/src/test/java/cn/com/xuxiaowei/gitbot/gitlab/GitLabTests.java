@@ -1,15 +1,20 @@
 package cn.com.xuxiaowei.gitbot.gitlab;
 
+import cn.com.xuxiaowei.gitbot.entity.GlBranch;
 import cn.com.xuxiaowei.gitbot.entity.GlNamespace;
 import cn.com.xuxiaowei.gitbot.entity.GlProject;
 import cn.com.xuxiaowei.gitbot.properties.GitbotProperties;
+import cn.com.xuxiaowei.gitbot.service.IGlBranchService;
+import cn.com.xuxiaowei.gitbot.service.IGlCommitService;
 import cn.com.xuxiaowei.gitbot.service.IGlNamespaceService;
 import cn.com.xuxiaowei.gitbot.service.IGlProjectService;
+import com.google.common.base.Joiner;
 import lombok.extern.slf4j.Slf4j;
 import org.gitlab4j.api.GitLabApi;
 import org.gitlab4j.api.GitLabApiException;
+import org.gitlab4j.api.models.Branch;
+import org.gitlab4j.api.models.Commit;
 import org.gitlab4j.api.models.Project;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -33,9 +38,15 @@ public class GitLabTests {
 	private IGlNamespaceService glNamespaceService;
 
 	@Autowired
+	private IGlCommitService glCommitService;
+
+	@Autowired
+	private IGlBranchService glBranchService;
+
+	@Autowired
 	private GitbotProperties gitbotProperties;
 
-	@Test
+	// @Test
 	void getProjects() throws GitLabApiException, MalformedURLException {
 		try (GitLabApi gitLabApi = new GitLabApi("https://gitlab.xuxiaowei.com.cn", null)) {
 			gitLabApi.setIgnoreCertificateErrors(true);
@@ -45,12 +56,13 @@ public class GitLabTests {
 			List<Project> projects = gitLabApi.getProjectApi().getProjects();
 			for (Project project : projects) {
 				log.info(project.getName());
-				saveOrUpdate(project, host);
+
+				saveOrUpdate(project, gitLabApi, host);
 			}
 		}
 	}
 
-	@Test
+	// @Test
 	void getOwnedProjects() throws GitLabApiException, MalformedURLException {
 		String personalAccessToken = System.getenv("GITBOT_GITLAB_TOKEN");
 		try (GitLabApi gitLabApi = new GitLabApi("https://jihulab.com", personalAccessToken)) {
@@ -61,12 +73,12 @@ public class GitLabTests {
 			List<Project> projects = gitLabApi.getProjectApi().getOwnedProjects();
 			for (Project project : projects) {
 				log.info(project.getName());
-				saveOrUpdate(project, host);
+				saveOrUpdate(project, gitLabApi, host);
 			}
 		}
 	}
 
-	void saveOrUpdate(Project project, String host) {
+	void saveOrUpdate(Project project, GitLabApi gitLabApi, String host) throws GitLabApiException {
 		GlProject glProject = new GlProject();
 		glProject.setId(project.getId());
 		glProject.setHost(host);
@@ -167,6 +179,111 @@ public class GitLabTests {
 		// @formatter:on
 
 		glProjectService.saveOrUpdate(glProject);
+
+		List<Branch> branches;
+		try {
+			branches = gitLabApi.getRepositoryApi().getBranches(project.getId());
+		}
+		catch (Exception e) {
+			log.error("查询分支异常", e);
+			return;
+		}
+
+		for (Branch branch : branches) {
+
+			GlBranch glBranch = new GlBranch();
+			glBranch.setProjectId(project.getId());
+			glBranch.setHost(host);
+			glBranch.setName(branch.getName());
+			glBranch.setDevelopersCanMerge(branch.getDevelopersCanMerge());
+			glBranch.setDevelopersCanPush(branch.getDevelopersCanPush());
+			glBranch.setMerged(branch.getMerged());
+			glBranch.setIsProtected(branch.getProtected());
+			glBranch.setIsDefault(branch.getDefault());
+			glBranch.setCanPush(branch.getCanPush());
+			glBranch.setWebUrl(branch.getWebUrl());
+
+			Commit commit = branch.getCommit();
+
+			// glBranch.setCommitAuthor(commit.getAuthor());
+			glBranch.setCommitAuthoredDate(
+					commit.getAuthoredDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
+			glBranch.setCommitAuthorEmail(commit.getAuthorEmail());
+			glBranch.setCommitAuthorName(commit.getAuthorName());
+			glBranch.setCommitCommittedDate(
+					commit.getCommittedDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
+			glBranch.setCommitCommitterEmail(commit.getCommitterEmail());
+			glBranch.setCommitCommitterName(commit.getCommitterName());
+			glBranch
+				.setCommitCreatedAt(commit.getCreatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
+			glBranch.setCommitId(commit.getId());
+			glBranch.setCommitMessage(commit.getMessage());
+			glBranch.setCommitParentIds(Joiner.on(",").join(commit.getParentIds()));
+			glBranch.setCommitShortId(commit.getShortId());
+			// glBranch.setCommitStats(commit.getStats());
+			glBranch.setCommitStatus(commit.getStatus());
+			glBranch.setCommitTimestamp(commit.getTimestamp() == null ? null
+					: commit.getTimestamp().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
+			glBranch.setCommitTitle(commit.getTitle());
+			glBranch.setCommitUrl(commit.getUrl());
+			glBranch.setCommitWebUrl(commit.getWebUrl());
+			glBranch.setCommitProjectId(commit.getProjectId());
+			glBranch
+				.setCommitLastPipelineId(commit.getLastPipeline() == null ? null : commit.getLastPipeline().getId());
+			glBranch
+				.setCommitLastPipelineIid(commit.getLastPipeline() == null ? null : commit.getLastPipeline().getIid());
+
+			glBranchService.saveOrUpdate(glBranch);
+
+			// Pager<Commit> commits;
+			// try {
+			// commits = gitLabApi.getCommitsApi().getCommits(project.getId(),
+			// branch.getName(), null, null, 1);
+			// }
+			// catch (Exception e) {
+			// log.error("查询历史提交异常", e);
+			// continue;
+			// }
+			//
+			// if (commits != null && !commits.current().isEmpty()) {
+			// List<Commit> current = commits.current();
+			// Commit commit = current.get(0);
+			// GlCommit glCommit = new GlCommit();
+			// glCommit.setId(commit.getId());
+			// glCommit.setHost(host);
+			// glCommit.setBranchName(branch.getName());
+			// glCommit.setAuthoredDate(
+			// commit.getAuthoredDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
+			// glCommit.setAuthorEmail(commit.getAuthorEmail());
+			// glCommit.setAuthorName(commit.getAuthorName());
+			// glCommit.setCommittedDate(
+			// commit.getCommittedDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
+			// glCommit.setCommitterEmail(commit.getCommitterEmail());
+			// glCommit.setCommitterName(commit.getCommitterName());
+			// glCommit
+			// .setCreatedAt(commit.getCreatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
+			// glCommit.setMessage(commit.getMessage());
+			// glCommit.setShortId(commit.getShortId());
+			// // glCommit.setStats(commit.getStats());
+			// glCommit.setStatus(commit.getStatus());
+			// glCommit.setTimestamp(commit.getTimestamp() == null ? null
+			// :
+			// commit.getTimestamp().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
+			// glCommit.setTitle(commit.getTitle());
+			// glCommit.setUrl(commit.getUrl());
+			// glCommit.setWebUrl(commit.getWebUrl());
+			// glCommit.setProjectId(commit.getProjectId() == null ? project.getId() :
+			// commit.getProjectId());
+			// glCommit.setLastPipelineId(commit.getLastPipeline() == null ? null :
+			// commit.getLastPipeline().getId());
+			// glCommit
+			// .setLastPipelineIid(commit.getLastPipeline() == null ? null :
+			// commit.getLastPipeline().getIid());
+			//
+			// glCommitService.saveOrUpdate(glCommit);
+			// }
+		}
+
 	}
 
 }
