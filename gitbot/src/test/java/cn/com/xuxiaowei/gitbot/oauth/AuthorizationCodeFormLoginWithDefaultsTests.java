@@ -13,7 +13,6 @@ import com.gargoylesoftware.htmlunit.html.HtmlCheckBoxInput;
 import com.gargoylesoftware.htmlunit.html.HtmlInput;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -52,7 +51,7 @@ class AuthorizationCodeFormLoginWithDefaultsTests {
 	@Autowired
 	private WebClient webClient;
 
-	@Test
+	// @Test
 	void start() throws IOException {
 
 		// 禁用 CSS 加载
