@@ -2,8 +2,10 @@ package cn.com.xuxiaowei.gitbot.service;
 
 import cn.com.xuxiaowei.gitbot.entity.GhOrganization;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.kohsuke.github.GHOrganization;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * <p>
@@ -18,6 +20,6 @@ public interface IGhOrganizationService extends IService<GhOrganization> {
 	/**
 	 * 需要授权：read:org
 	 */
-	void saveMyOrganizations(String oauthToken) throws IOException;
+	List<GHOrganization> saveMyOrganizations(String oauthToken) throws IOException;
 
 }

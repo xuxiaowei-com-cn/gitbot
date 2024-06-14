@@ -13,6 +13,9 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.time.ZoneId;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -32,10 +35,11 @@ public class GhOrganizationServiceImpl extends ServiceImpl<GhOrganizationMapper,
 	 * 需要授权：read:org
 	 */
 	@Override
-	public void saveMyOrganizations(String oauthToken) throws IOException {
+	public List<GHOrganization> saveMyOrganizations(String oauthToken) throws IOException {
 
 		int saved = 0;
 		int updated = 0;
+		Collection<GHOrganization> ghOrganizations;
 
 		try {
 			GitHubBuilder gitHubBuilder = new GitHubBuilder();
@@ -46,8 +50,9 @@ public class GhOrganizationServiceImpl extends ServiceImpl<GhOrganizationMapper,
 
 			// 需要授权 read:org
 			Map<String, GHOrganization> myOrganizations = github.getMyOrganizations();
+			ghOrganizations = myOrganizations.values();
 
-			for (GHOrganization organization : myOrganizations.values()) {
+			for (GHOrganization organization : ghOrganizations) {
 
 				GhOrganization ghOrganization = new GhOrganization();
 				ghOrganization.setId(organization.getId());
@@ -92,6 +97,8 @@ public class GhOrganizationServiceImpl extends ServiceImpl<GhOrganizationMapper,
 			log.debug("saved: {}", saved);
 			log.debug("updated: {}", updated);
 		}
+
+		return new ArrayList<>(ghOrganizations);
 	}
 
 }
