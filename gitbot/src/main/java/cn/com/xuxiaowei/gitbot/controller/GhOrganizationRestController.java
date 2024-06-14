@@ -4,9 +4,12 @@ import cn.com.xuxiaowei.gitbot.bo.SaveOrganizationBO;
 import cn.com.xuxiaowei.gitbot.service.IGhOrganizationService;
 import cn.com.xuxiaowei.gitbot.utils.Response;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.gitlab4j.api.GitLabApiException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,12 +21,15 @@ import java.io.IOException;
 
 /**
  * <p>
- * 前端控制器
+ * GitHub 组织 前端控制器
  * </p>
  *
  * @author xuxiaowei
  * @since 2024-06-14
  */
+@Slf4j
+@Tag(name = "GitHub 组织")
+@SecurityRequirement(name = "oauth2_clientCredentials")
 @RestController
 @RequestMapping("/gh/organization")
 public class GhOrganizationRestController {
