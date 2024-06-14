@@ -19,7 +19,7 @@ class IGhRepositoryServiceTests {
 	private IGhRepositoryService ghRepositoryService;
 
 	@Test
-	void saveMyOrganizations() throws IOException {
+	void saveMyOrganizationRepository() throws IOException {
 		String oauthToken = System.getenv("GITBOT_GITHUB_TOKEN");
 		ghRepositoryService.saveRepository(oauthToken);
 	}

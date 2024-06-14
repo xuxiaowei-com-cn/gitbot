@@ -1,12 +1,15 @@
 package cn.com.xuxiaowei.gitbot.service.impl;
 
+import cn.com.xuxiaowei.gitbot.entity.GhBranch;
 import cn.com.xuxiaowei.gitbot.entity.GhRepository;
 import cn.com.xuxiaowei.gitbot.mapper.GhRepositoryMapper;
+import cn.com.xuxiaowei.gitbot.service.IGhBranchService;
 import cn.com.xuxiaowei.gitbot.service.IGhOrganizationService;
 import cn.com.xuxiaowei.gitbot.service.IGhRepositoryService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
+import org.kohsuke.github.GHBranch;
 import org.kohsuke.github.GHOrganization;
 import org.kohsuke.github.GHRepository;
 import org.kohsuke.github.PagedIterable;
@@ -16,6 +19,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.time.ZoneId;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -32,9 +36,16 @@ public class GhRepositoryServiceImpl extends ServiceImpl<GhRepositoryMapper, GhR
 
 	private IGhOrganizationService ghOrganizationService;
 
+	private IGhBranchService ghBranchService;
+
 	@Autowired
 	public void setGhOrganizationService(IGhOrganizationService ghOrganizationService) {
 		this.ghOrganizationService = ghOrganizationService;
+	}
+
+	@Autowired
+	public void setGhBranchService(IGhBranchService ghBranchService) {
+		this.ghBranchService = ghBranchService;
 	}
 
 	/**
@@ -110,6 +121,22 @@ public class GhRepositoryServiceImpl extends ServiceImpl<GhRepositoryMapper, GhR
 					else {
 						update(ghRepository, queryWrapper);
 						updated++;
+					}
+
+					Map<String, GHBranch> branches = repository.getBranches();
+
+					for (GHBranch branch : branches.values()) {
+
+						GhBranch ghBranch = new GhBranch();
+						ghBranch.setId(repository.getId());
+						ghBranch.setName(branch.getName());
+						ghBranch.setSha(branch.getSHA1());
+						ghBranch.setProtection(branch.isProtected());
+						// @formatter:off
+						ghBranch.setProtectionUrl(branch.getProtectionUrl() == null ? null : branch.getProtectionUrl().toString());
+						// @formatter:on
+
+						ghBranchService.saveOrUpdate(ghBranch);
 					}
 				}
 			}
