@@ -11,7 +11,7 @@
  Target Server Version : 50736
  File Encoding         : 65001
 
- Date: 12/06/2024 20:41:12
+ Date: 14/06/2024 14:16:04
 */
 
 SET NAMES utf8mb4;
@@ -175,6 +175,21 @@ CREATE TABLE `gl_commit`  (
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
+-- Table structure for gl_environment
+-- ----------------------------
+CREATE TABLE `gl_environment`  (
+  `id` bigint(20) NOT NULL,
+  `host` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `project_id` bigint(20) NOT NULL,
+  `name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `slug` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `external_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `state` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `last_deployment` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  PRIMARY KEY (`id`, `host`, `project_id`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
 -- Table structure for gl_issue
 -- ----------------------------
 CREATE TABLE `gl_issue`  (
@@ -204,8 +219,8 @@ CREATE TABLE `gl_issue`  (
   `discussion_locked` tinyint(1) NULL DEFAULT NULL,
   `time_estimate` int(11) NULL DEFAULT NULL,
   `total_time_spent` int(11) NULL DEFAULT NULL,
-  `human_time_estimate` int(0) NULL DEFAULT NULL,
-  `human_total_time_spent` int(0) NULL DEFAULT NULL,
+  `human_time_estimate` int(11) NULL DEFAULT NULL,
+  `human_total_time_spent` int(11) NULL DEFAULT NULL,
   `upvotes` int(11) NULL DEFAULT NULL,
   `downvotes` int(11) NULL DEFAULT NULL,
   `merge_requests_count` int(11) NULL DEFAULT NULL,
