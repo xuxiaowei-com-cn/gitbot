@@ -11,7 +11,7 @@
  Target Server Version : 50736
  File Encoding         : 65001
 
- Date: 14/06/2024 14:16:04
+ Date: 14/06/2024 15:40:35
 */
 
 SET NAMES utf8mb4;
@@ -356,5 +356,20 @@ CREATE TABLE `gl_project`  (
   `marked_for_deletion_on` datetime(0) NULL DEFAULT NULL,
   PRIMARY KEY (`id`, `host`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Table structure for gl_variable
+-- ----------------------------
+CREATE TABLE `gl_variable`  (
+  `host` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `project_id` bigint(20) NOT NULL,
+  `key` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `environment_scope` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `value` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL,
+  `variable_type` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `is_protected` tinyint(1) NULL DEFAULT NULL,
+  `masked` tinyint(1) NULL DEFAULT NULL,
+  PRIMARY KEY (`host`, `project_id`, `key`, `environment_scope`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 SET FOREIGN_KEY_CHECKS = 1;
