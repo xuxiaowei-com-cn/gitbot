@@ -45,6 +45,9 @@ class TableTests {
 	private IGlProjectService glProjectService;
 
 	@Autowired
+	private IGlVariableService glVariableService;
+
+	@Autowired
 	private IGroupAuthoritiesService groupAuthoritiesService;
 
 	@Autowired
@@ -77,6 +80,7 @@ class TableTests {
 		glNamespaceService.list(new Page<>(1, 1));
 		glNoteService.list(new Page<>(1, 1));
 		glProjectService.list(new Page<>(1, 1));
+		glVariableService.list(new Page<>(1, 1));
 		groupAuthoritiesService.list(new Page<>(1, 1));
 		groupMembersService.list(new Page<>(1, 1));
 		groupsService.list(new Page<>(1, 1));

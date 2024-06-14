@@ -6,6 +6,7 @@ import cn.com.xuxiaowei.gitbot.properties.GitbotProperties;
 import cn.com.xuxiaowei.gitbot.service.IGlBranchService;
 import cn.com.xuxiaowei.gitbot.service.IGlEnvironmentService;
 import cn.com.xuxiaowei.gitbot.service.IGlProjectService;
+import cn.com.xuxiaowei.gitbot.service.IGlVariableService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
@@ -38,6 +39,8 @@ public class GlProjectServiceImpl extends ServiceImpl<GlProjectMapper, GlProject
 
 	private IGlEnvironmentService glEnvironmentService;
 
+	private IGlVariableService glVariableService;
+
 	@Autowired
 	public void setGitbotProperties(GitbotProperties gitbotProperties) {
 		this.gitbotProperties = gitbotProperties;
@@ -51,6 +54,11 @@ public class GlProjectServiceImpl extends ServiceImpl<GlProjectMapper, GlProject
 	@Autowired
 	public void setGlEnvironmentService(IGlEnvironmentService glEnvironmentService) {
 		this.glEnvironmentService = glEnvironmentService;
+	}
+
+	@Autowired
+	public void setGlVariableService(IGlVariableService glVariableService) {
+		this.glVariableService = glVariableService;
 	}
 
 	@Override
@@ -162,6 +170,8 @@ public class GlProjectServiceImpl extends ServiceImpl<GlProjectMapper, GlProject
 
 				glEnvironmentService.saveEnvironment(hostUrl, ignoreCertificateErrors, personalAccessToken,
 						project.getId());
+
+				glVariableService.saveVariable(hostUrl, ignoreCertificateErrors, personalAccessToken, project.getId());
 
 			}
 
