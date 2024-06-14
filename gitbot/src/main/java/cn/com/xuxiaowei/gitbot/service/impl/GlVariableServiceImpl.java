@@ -41,16 +41,23 @@ public class GlVariableServiceImpl extends ServiceImpl<GlVariableMapper, GlVaria
 		try (GitLabApi gitLabApi = new GitLabApi(hostUrl, personalAccessToken)) {
 			gitLabApi.setIgnoreCertificateErrors(true);
 
-			long projectId;
-			if (projectIdOrPath instanceof Long) {
-				projectId = (Long) projectIdOrPath;
-			}
-			else {
-				Project project = gitLabApi.getProjectApi().getProject(projectIdOrPath);
-				projectId = project.getId();
-			}
+			Project project = gitLabApi.getProjectApi().getProject(projectIdOrPath);
+			long projectId = project.getId();
+			Boolean archived = project.getArchived();
 
-			List<Variable> variables = gitLabApi.getProjectApi().getVariables(projectIdOrPath);
+			List<Variable> variables;
+			try {
+				variables = gitLabApi.getProjectApi().getVariables(projectIdOrPath);
+			}
+			catch (GitLabApiException e) {
+				if (archived != null && archived) {
+					log.error("归档项目无法获取环境变量", e);
+					return;
+				}
+
+				log.error("获取环境变量异常", e);
+				throw e;
+			}
 			for (Variable variable : variables) {
 
 				GlVariable glVariable = new GlVariable();
