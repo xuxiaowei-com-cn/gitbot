@@ -94,7 +94,7 @@ public class GlBranchServiceImpl extends ServiceImpl<GlBranchMapper, GlBranch> i
 				glBranch.setCommitCreatedAt(commit.getCreatedAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
 				glBranch.setCommitId(commit.getId());
 				glBranch.setCommitMessage(commit.getMessage());
-				glBranch.setCommitParentIds(Joiner.on(",").join(commit.getParentIds()));
+				glBranch.setCommitParentIds(commit.getParentIds() == null ? null : Joiner.on(",").join(commit.getParentIds()));
 				glBranch.setCommitShortId(commit.getShortId());
 				// glBranch.setCommitStats(commit.getStats());
 				glBranch.setCommitStatus(commit.getStatus());

@@ -131,7 +131,7 @@ public class GlProjectServiceImpl extends ServiceImpl<GlProjectMapper, GlProject
 				glProject.setAutocloseReferencedIssues(project.getAutocloseReferencedIssues());
 				glProject.setEmailsDisabled(project.getEmailsDisabled());
 				glProject.setSuggestionCommitMessage(project.getSuggestionCommitMessage());
-				glProject.setSquashOption(project.getSquashOption().toString());
+				glProject.setSquashOption(project.getSquashOption() == null ? null : project.getSquashOption().toString());
 				glProject.setMarkedForDeletionOn(project.getMarkedForDeletionOn() == null ? null : project.getMarkedForDeletionOn().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime());
 				// @formatter:on
 

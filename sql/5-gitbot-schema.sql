@@ -122,7 +122,7 @@ CREATE TABLE `gl_branch`  (
   `is_protected` tinyint(1) NULL DEFAULT NULL,
   `is_default` tinyint(1) NULL DEFAULT NULL,
   `can_push` tinyint(1) NULL DEFAULT NULL,
-  `web_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
+  `web_url` varchar(1000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   `commit_author` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   `commit_authored_date` datetime(0) NULL DEFAULT NULL,
   `commit_author_email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
