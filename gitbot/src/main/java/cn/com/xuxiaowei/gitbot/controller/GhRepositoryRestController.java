@@ -1,6 +1,7 @@
 package cn.com.xuxiaowei.gitbot.controller;
 
-import cn.com.xuxiaowei.gitbot.bo.SaveRepositoryBO;
+import cn.com.xuxiaowei.gitbot.bo.SaveMyOrganizationRepositoryBO;
+import cn.com.xuxiaowei.gitbot.bo.SaveMyselfRepositoryBO;
 import cn.com.xuxiaowei.gitbot.service.IGhRepositoryService;
 import cn.com.xuxiaowei.gitbot.utils.Response;
 import io.swagger.v3.oas.annotations.Operation;
@@ -42,17 +43,32 @@ public class GhRepositoryRestController {
 	}
 
 	/**
-	 * 保存仓库
+	 * 保存组织仓库
 	 * @param request 请求
 	 * @param response 响应
-	 * @param saveRepositoryBO 保存仓库 参数
+	 * @param saveRepositoryBO 保存组织仓库 参数
 	 * @return 返回 保存结果
 	 */
-	@Operation(summary = "保存仓库")
-	@PostMapping("/save")
-	public Response<?> save(HttpServletRequest request, HttpServletResponse response,
-			@Valid @RequestBody SaveRepositoryBO saveRepositoryBO) throws GitLabApiException, IOException {
-		ghRepositoryService.saveRepository(saveRepositoryBO.getOauthToken());
+	@Operation(summary = "保存组织仓库")
+	@PostMapping("/save-my-organization-repository")
+	public Response<?> saveMyOrganizationRepository(HttpServletRequest request, HttpServletResponse response,
+			@Valid @RequestBody SaveMyOrganizationRepositoryBO saveRepositoryBO) throws IOException {
+		ghRepositoryService.saveMyOrganizationRepository(saveRepositoryBO.getOauthToken());
+		return Response.ok();
+	}
+
+	/**
+	 * 保存自己的仓库
+	 * @param request 请求
+	 * @param response 响应
+	 * @param saveRepositoryBO 保存自己的仓库 参数
+	 * @return 返回 保存结果
+	 */
+	@Operation(summary = "保存自己的仓库")
+	@PostMapping("/save-my-repository")
+	public Response<?> saveMyselfRepository(HttpServletRequest request, HttpServletResponse response,
+			@Valid @RequestBody SaveMyselfRepositoryBO saveRepositoryBO) throws GitLabApiException, IOException {
+		ghRepositoryService.saveMyselfRepository(saveRepositoryBO.getOauthToken());
 		return Response.ok();
 	}
 
