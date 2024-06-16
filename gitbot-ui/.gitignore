@@ -37,3 +37,6 @@ pnpm-lock.yaml
 package-lock.json
 
 /node/
+
+/auto-imports.d.ts
+/components.d.ts

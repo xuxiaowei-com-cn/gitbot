@@ -8,6 +8,8 @@ import org.springframework.stereotype.Component;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.interfaces.RSAPublicKey;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Git 机器人 安全配置
@@ -33,6 +35,71 @@ public class GitbotProperties {
 	 * RSA 私钥
 	 */
 	private String privateKey;
+
+	/**
+	 * Token URL
+	 */
+	private String tokenUrl;
+
+	/**
+	 * 请求授权客户ID
+	 */
+	private String authorizeClientId;
+
+	/**
+	 * 请求授权客户秘钥
+	 */
+	private String authorizeClientSecret;
+
+	/**
+	 * 请求授权成功后重定向地址
+	 */
+	private String authorizeRedirectUri;
+
+	/**
+	 * 请求授权范围，多个值使用空格隔开，请勿将空格转译
+	 */
+	private String authorizeScope;
+
+	/**
+	 * 请求授权成功后的 URL
+	 */
+	private String authorizeSuccessUrl;
+
+	/**
+	 * Token 票据 Redis 前缀
+	 */
+	private String ticketPrefix;
+
+	/**
+	 * 允许跨域的来源
+	 */
+	private List<String> allowedOrigins = new ArrayList<>();
+
+	/**
+	 * 允许跨域的方法
+	 */
+	private List<String> allowedMethods;
+
+	/**
+	 * 允许跨域的请求头
+	 */
+	private List<String> allowedHeaders;
+
+	/**
+	 * 允许跨域时是否携带凭证
+	 */
+	private Boolean allowCredentials;
+
+	/**
+	 * 配置客户端可以缓存来自预检请求的响应多长时间（以秒为单位）。 默认情况下，未设置此项。
+	 */
+	private Long maxAge;
+
+	/**
+	 * 允许跨域路径
+	 */
+	private String pattern;
 
 	/**
 	 * GitLab 配置

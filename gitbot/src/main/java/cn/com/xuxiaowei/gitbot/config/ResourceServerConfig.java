@@ -1,11 +1,11 @@
 package cn.com.xuxiaowei.gitbot.config;
 
+import cn.com.xuxiaowei.gitbot.handler.SuccessHandler;
 import cn.com.xuxiaowei.gitbot.properties.GitbotProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcOperations;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.server.authorization.JdbcOAuth2AuthorizationConsentService;
@@ -16,6 +16,8 @@ import org.springframework.security.oauth2.server.authorization.client.JdbcRegis
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import javax.sql.DataSource;
 import java.security.interfaces.RSAPublicKey;
@@ -29,9 +31,16 @@ public class ResourceServerConfig {
 
 	private GitbotProperties gitbotProperties;
 
+	private SuccessHandler successHandler;
+
 	@Autowired
 	public void setGitbotProperties(GitbotProperties gitbotProperties) {
 		this.gitbotProperties = gitbotProperties;
+	}
+
+	@Autowired
+	public void setSuccessHandler(SuccessHandler successHandler) {
+		this.successHandler = successHandler;
 	}
 
 	@Bean
@@ -67,9 +76,24 @@ public class ResourceServerConfig {
 
 		});
 
-		http.formLogin(Customizer.withDefaults());
-		// http.formLogin(AbstractHttpConfigurer::disable);
-		// http.csrf(AbstractHttpConfigurer::disable);
+		http.formLogin(customizer -> {
+			customizer.successHandler(successHandler);
+		});
+
+		http.cors(customizer -> {
+
+			CorsConfiguration configuration = new CorsConfiguration();
+			configuration.setAllowedOrigins(gitbotProperties.getAllowedOrigins());
+			configuration.setAllowedMethods(gitbotProperties.getAllowedMethods());
+			configuration.setAllowedHeaders(gitbotProperties.getAllowedHeaders());
+			configuration.setAllowCredentials(gitbotProperties.getAllowCredentials());
+			configuration.setMaxAge(gitbotProperties.getMaxAge());
+
+			UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+			source.registerCorsConfiguration(gitbotProperties.getPattern(), configuration);
+
+			customizer.configurationSource(source);
+		});
 
 		http.oauth2ResourceServer(customizer -> {
 			customizer.jwt(jwtCustomizer -> {
