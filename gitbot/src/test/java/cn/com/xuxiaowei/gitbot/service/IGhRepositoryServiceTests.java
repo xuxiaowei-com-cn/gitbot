@@ -24,7 +24,9 @@ class IGhRepositoryServiceTests {
 		log.info(gitbotGithubEnable);
 		if (Boolean.TRUE.toString().equals(gitbotGithubEnable)) {
 			String oauthToken = System.getenv("GITBOT_GITHUB_TOKEN");
-			ghRepositoryService.saveMyOrganizationRepository(oauthToken);
+			boolean saveBranch = false;
+			boolean savePullRequest = false;
+			ghRepositoryService.saveMyOrganizationRepository(oauthToken, saveBranch, savePullRequest);
 		}
 		else {
 			log.info("跳过 GitHub 测试");
@@ -37,7 +39,9 @@ class IGhRepositoryServiceTests {
 		log.info(gitbotGithubEnable);
 		if (Boolean.TRUE.toString().equals(gitbotGithubEnable)) {
 			String oauthToken = System.getenv("GITBOT_GITHUB_TOKEN");
-			ghRepositoryService.saveMyselfRepository(oauthToken);
+			boolean saveBranch = true;
+			boolean savePullRequest = true;
+			ghRepositoryService.saveMyselfRepository(oauthToken, saveBranch, savePullRequest);
 		}
 		else {
 			log.info("跳过 GitHub 测试");

@@ -20,4 +20,14 @@ public class SaveMyselfRepositoryBO {
 	@NotEmpty(message = "授权凭证不能为空")
 	private String oauthToken;
 
+	/**
+	 * 保存分支
+	 */
+	private boolean saveBranch;
+
+	/**
+	 * 是否保存 PR
+	 */
+	private boolean savePullRequest;
+
 }

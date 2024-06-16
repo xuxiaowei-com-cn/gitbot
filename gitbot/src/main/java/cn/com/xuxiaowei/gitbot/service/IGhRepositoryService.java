@@ -18,13 +18,14 @@ public interface IGhRepositoryService extends IService<GhRepository> {
 	/**
 	 * 需要授权：read:org
 	 */
-	void saveMyOrganizationRepository(String oauthToken) throws IOException;
+	void saveMyOrganizationRepository(String oauthToken, boolean saveBranch, boolean savePullRequest)
+			throws IOException;
 
 	/**
 	 * 1. 不提供任何授权，仅可获取公开仓库
 	 * <p>
 	 * 2. 提供 repo 或 public_repo 权限，可获取所有仓库
 	 */
-	void saveMyselfRepository(String oauthToken) throws IOException;
+	void saveMyselfRepository(String oauthToken, boolean saveBranch, boolean savePullRequest) throws IOException;
 
 }

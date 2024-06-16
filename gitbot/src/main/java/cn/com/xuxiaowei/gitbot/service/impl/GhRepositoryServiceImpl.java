@@ -57,7 +57,8 @@ public class GhRepositoryServiceImpl extends ServiceImpl<GhRepositoryMapper, GhR
 	 * 需要授权：read:org
 	 */
 	@Override
-	public void saveMyOrganizationRepository(String oauthToken) throws IOException {
+	public void saveMyOrganizationRepository(String oauthToken, boolean saveBranch, boolean savePullRequest)
+			throws IOException {
 
 		int saved = 0;
 		int updated = 0;
@@ -84,23 +85,27 @@ public class GhRepositoryServiceImpl extends ServiceImpl<GhRepositoryMapper, GhR
 						updated++;
 					}
 
-					Map<String, GHBranch> branches = repository.getBranches();
+					if (saveBranch) {
+						Map<String, GHBranch> branches = repository.getBranches();
 
-					for (GHBranch branch : branches.values()) {
+						for (GHBranch branch : branches.values()) {
 
-						GhBranch ghBranch = new GhBranch();
-						ghBranch.setId(repository.getId());
-						ghBranch.setName(branch.getName());
-						ghBranch.setSha(branch.getSHA1());
-						ghBranch.setProtection(branch.isProtected());
-						// @formatter:off
-						ghBranch.setProtectionUrl(branch.getProtectionUrl() == null ? null : branch.getProtectionUrl().toString());
-						// @formatter:on
+							GhBranch ghBranch = new GhBranch();
+							ghBranch.setId(repository.getId());
+							ghBranch.setName(branch.getName());
+							ghBranch.setSha(branch.getSHA1());
+							ghBranch.setProtection(branch.isProtected());
+							// @formatter:off
+							ghBranch.setProtectionUrl(branch.getProtectionUrl() == null ? null : branch.getProtectionUrl().toString());
+							// @formatter:on
 
-						ghBranchService.saveOrUpdate(ghBranch);
+							ghBranchService.saveOrUpdate(ghBranch);
+						}
 					}
 
-					ghPullRequestService.savePullRequest(oauthToken, repository.getId(), GHIssueState.ALL);
+					if (savePullRequest) {
+						ghPullRequestService.savePullRequest(oauthToken, repository.getId(), GHIssueState.ALL);
+					}
 				}
 			}
 		}
@@ -116,7 +121,8 @@ public class GhRepositoryServiceImpl extends ServiceImpl<GhRepositoryMapper, GhR
 	 * 2. 提供 repo 或 public_repo 权限，可获取所有仓库
 	 */
 	@Override
-	public void saveMyselfRepository(String oauthToken) throws IOException {
+	public void saveMyselfRepository(String oauthToken, boolean saveBranch, boolean savePullRequest)
+			throws IOException {
 
 		int saved = 0;
 		int updated = 0;
@@ -147,24 +153,27 @@ public class GhRepositoryServiceImpl extends ServiceImpl<GhRepositoryMapper, GhR
 					updated++;
 				}
 
-				Map<String, GHBranch> branches = repository.getBranches();
+				if (saveBranch) {
+					Map<String, GHBranch> branches = repository.getBranches();
 
-				for (GHBranch branch : branches.values()) {
+					for (GHBranch branch : branches.values()) {
 
-					GhBranch ghBranch = new GhBranch();
-					ghBranch.setId(repository.getId());
-					ghBranch.setName(branch.getName());
-					ghBranch.setSha(branch.getSHA1());
-					ghBranch.setProtection(branch.isProtected());
-					// @formatter:off
+						GhBranch ghBranch = new GhBranch();
+						ghBranch.setId(repository.getId());
+						ghBranch.setName(branch.getName());
+						ghBranch.setSha(branch.getSHA1());
+						ghBranch.setProtection(branch.isProtected());
+						// @formatter:off
 						ghBranch.setProtectionUrl(branch.getProtectionUrl() == null ? null : branch.getProtectionUrl().toString());
 						// @formatter:on
 
-					ghBranchService.saveOrUpdate(ghBranch);
+						ghBranchService.saveOrUpdate(ghBranch);
+					}
 				}
 
-				ghPullRequestService.savePullRequest(oauthToken, repository.getId(), GHIssueState.ALL);
-
+				if (savePullRequest) {
+					ghPullRequestService.savePullRequest(oauthToken, repository.getId(), GHIssueState.ALL);
+				}
 			}
 		}
 		finally {

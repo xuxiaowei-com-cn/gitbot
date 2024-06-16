@@ -53,7 +53,8 @@ public class GhRepositoryRestController {
 	@PostMapping("/save-my-organization-repository")
 	public Response<?> saveMyOrganizationRepository(HttpServletRequest request, HttpServletResponse response,
 			@Valid @RequestBody SaveMyOrganizationRepositoryBO saveRepositoryBO) throws IOException {
-		ghRepositoryService.saveMyOrganizationRepository(saveRepositoryBO.getOauthToken());
+		ghRepositoryService.saveMyOrganizationRepository(saveRepositoryBO.getOauthToken(),
+				saveRepositoryBO.isSaveBranch(), saveRepositoryBO.isSavePullRequest());
 		return Response.ok();
 	}
 
@@ -68,7 +69,8 @@ public class GhRepositoryRestController {
 	@PostMapping("/save-my-repository")
 	public Response<?> saveMyselfRepository(HttpServletRequest request, HttpServletResponse response,
 			@Valid @RequestBody SaveMyselfRepositoryBO saveRepositoryBO) throws GitLabApiException, IOException {
-		ghRepositoryService.saveMyselfRepository(saveRepositoryBO.getOauthToken());
+		ghRepositoryService.saveMyselfRepository(saveRepositoryBO.getOauthToken(), saveRepositoryBO.isSaveBranch(),
+				saveRepositoryBO.isSavePullRequest());
 		return Response.ok();
 	}
 
