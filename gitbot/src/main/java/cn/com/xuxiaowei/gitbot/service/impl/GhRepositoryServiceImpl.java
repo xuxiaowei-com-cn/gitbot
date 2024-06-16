@@ -5,6 +5,7 @@ import cn.com.xuxiaowei.gitbot.entity.GhRepository;
 import cn.com.xuxiaowei.gitbot.mapper.GhRepositoryMapper;
 import cn.com.xuxiaowei.gitbot.service.IGhBranchService;
 import cn.com.xuxiaowei.gitbot.service.IGhOrganizationService;
+import cn.com.xuxiaowei.gitbot.service.IGhPullRequestService;
 import cn.com.xuxiaowei.gitbot.service.IGhRepositoryService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -35,6 +36,8 @@ public class GhRepositoryServiceImpl extends ServiceImpl<GhRepositoryMapper, GhR
 
 	private IGhBranchService ghBranchService;
 
+	private IGhPullRequestService ghPullRequestService;
+
 	@Autowired
 	public void setGhOrganizationService(IGhOrganizationService ghOrganizationService) {
 		this.ghOrganizationService = ghOrganizationService;
@@ -43,6 +46,11 @@ public class GhRepositoryServiceImpl extends ServiceImpl<GhRepositoryMapper, GhR
 	@Autowired
 	public void setGhBranchService(IGhBranchService ghBranchService) {
 		this.ghBranchService = ghBranchService;
+	}
+
+	@Autowired
+	public void setGhPullRequestService(IGhPullRequestService ghPullRequestService) {
+		this.ghPullRequestService = ghPullRequestService;
 	}
 
 	/**
@@ -91,6 +99,8 @@ public class GhRepositoryServiceImpl extends ServiceImpl<GhRepositoryMapper, GhR
 
 						ghBranchService.saveOrUpdate(ghBranch);
 					}
+
+					ghPullRequestService.savePullRequest(oauthToken, repository.getId(), GHIssueState.ALL);
 				}
 			}
 		}
@@ -152,6 +162,9 @@ public class GhRepositoryServiceImpl extends ServiceImpl<GhRepositoryMapper, GhR
 
 					ghBranchService.saveOrUpdate(ghBranch);
 				}
+
+				ghPullRequestService.savePullRequest(oauthToken, repository.getId(), GHIssueState.ALL);
+
 			}
 		}
 		finally {

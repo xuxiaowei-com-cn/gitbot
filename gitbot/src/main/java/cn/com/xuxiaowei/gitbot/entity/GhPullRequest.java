@@ -22,6 +22,8 @@ public class GhPullRequest implements Serializable {
 
 	private Long id;
 
+	private Long projectId;
+
 	private String patchUrl;
 
 	private String diffUrl;
@@ -30,7 +32,7 @@ public class GhPullRequest implements Serializable {
 
 	private LocalDateTime mergedAt;
 
-	private String mergedBy;
+	private Long mergedBy;
 
 	private Integer reviewComments;
 
@@ -38,7 +40,7 @@ public class GhPullRequest implements Serializable {
 
 	private Integer commits;
 
-	private String merged;
+	private Boolean merged;
 
 	private String maintainerCanModify;
 
@@ -56,7 +58,7 @@ public class GhPullRequest implements Serializable {
 
 	private String autoMerge;
 
-	private String assignee;
+	private Long assignee;
 
 	private String assignees;
 
@@ -78,9 +80,9 @@ public class GhPullRequest implements Serializable {
 
 	private String pullRequest;
 
-	private String milestone;
+	private Long milestone;
 
-	private String closedBy;
+	private Long closedBy;
 
 	private Boolean locked;
 
