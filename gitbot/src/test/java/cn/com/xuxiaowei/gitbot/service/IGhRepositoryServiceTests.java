@@ -20,14 +20,28 @@ class IGhRepositoryServiceTests {
 
 	@Test
 	void saveMyOrganizationRepository() throws IOException {
-		String oauthToken = System.getenv("GITBOT_GITHUB_TOKEN");
-		ghRepositoryService.saveMyOrganizationRepository(oauthToken);
+		String gitbotGithubEnable = System.getenv("GITBOT_GITHUB_ENABLE");
+		log.info(gitbotGithubEnable);
+		if (Boolean.TRUE.toString().equals(gitbotGithubEnable)) {
+			String oauthToken = System.getenv("GITBOT_GITHUB_TOKEN");
+			ghRepositoryService.saveMyOrganizationRepository(oauthToken);
+		}
+		else {
+			log.info("跳过 GitHub 测试");
+		}
 	}
 
 	@Test
 	void saveMyselfRepository() throws IOException {
-		String oauthToken = System.getenv("GITBOT_GITHUB_TOKEN");
-		ghRepositoryService.saveMyselfRepository(oauthToken);
+		String gitbotGithubEnable = System.getenv("GITBOT_GITHUB_ENABLE");
+		log.info(gitbotGithubEnable);
+		if (Boolean.TRUE.toString().equals(gitbotGithubEnable)) {
+			String oauthToken = System.getenv("GITBOT_GITHUB_TOKEN");
+			ghRepositoryService.saveMyselfRepository(oauthToken);
+		}
+		else {
+			log.info("跳过 GitHub 测试");
+		}
 	}
 
 }

@@ -20,8 +20,15 @@ class IGhOrganizationServiceTests {
 
 	@Test
 	void saveMyOrganizations() throws IOException {
-		String oauthToken = System.getenv("GITBOT_GITHUB_TOKEN");
-		ghOrganizationService.saveMyOrganizations(oauthToken);
+		String gitbotGithubEnable = System.getenv("GITBOT_GITHUB_ENABLE");
+		log.info(gitbotGithubEnable);
+		if (Boolean.TRUE.toString().equals(gitbotGithubEnable)) {
+			String oauthToken = System.getenv("GITBOT_GITHUB_TOKEN");
+			ghOrganizationService.saveMyOrganizations(oauthToken);
+		}
+		else {
+			log.info("跳过 GitHub 测试");
+		}
 	}
 
 }
