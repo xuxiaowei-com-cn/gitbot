@@ -2,6 +2,7 @@ package cn.com.xuxiaowei.gitbot.bo;
 
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
+import org.kohsuke.github.GHIssueState;
 
 /**
  * @author xuxiaowei
@@ -25,5 +26,10 @@ public class SaveMyOrganizationRepositoryBO {
 	 * 是否保存 PR
 	 */
 	private boolean savePullRequest;
+
+	/**
+	 * PR 状态
+	 */
+	private GHIssueState issueState;
 
 }

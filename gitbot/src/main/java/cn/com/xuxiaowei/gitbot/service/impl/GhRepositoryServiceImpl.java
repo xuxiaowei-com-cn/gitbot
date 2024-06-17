@@ -57,8 +57,8 @@ public class GhRepositoryServiceImpl extends ServiceImpl<GhRepositoryMapper, GhR
 	 * 需要授权：read:org
 	 */
 	@Override
-	public void saveMyOrganizationRepository(String oauthToken, boolean saveBranch, boolean savePullRequest)
-			throws IOException {
+	public void saveMyOrganizationRepository(String oauthToken, boolean saveBranch, boolean savePullRequest,
+			GHIssueState issueState) throws IOException {
 
 		int saved = 0;
 		int updated = 0;
@@ -121,8 +121,8 @@ public class GhRepositoryServiceImpl extends ServiceImpl<GhRepositoryMapper, GhR
 	 * 2. 提供 repo 或 public_repo 权限，可获取所有仓库
 	 */
 	@Override
-	public void saveMyselfRepository(String oauthToken, boolean saveBranch, boolean savePullRequest)
-			throws IOException {
+	public void saveMyselfRepository(String oauthToken, boolean saveBranch, boolean savePullRequest,
+			GHIssueState issueState) throws IOException {
 
 		int saved = 0;
 		int updated = 0;

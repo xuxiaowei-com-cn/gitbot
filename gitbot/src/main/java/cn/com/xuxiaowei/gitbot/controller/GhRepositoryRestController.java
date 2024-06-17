@@ -11,7 +11,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
-import org.gitlab4j.api.GitLabApiException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -54,7 +53,8 @@ public class GhRepositoryRestController {
 	public Response<?> saveMyOrganizationRepository(HttpServletRequest request, HttpServletResponse response,
 			@Valid @RequestBody SaveMyOrganizationRepositoryBO saveRepositoryBO) throws IOException {
 		ghRepositoryService.saveMyOrganizationRepository(saveRepositoryBO.getOauthToken(),
-				saveRepositoryBO.isSaveBranch(), saveRepositoryBO.isSavePullRequest());
+				saveRepositoryBO.isSaveBranch(), saveRepositoryBO.isSavePullRequest(),
+				saveRepositoryBO.getIssueState());
 		return Response.ok();
 	}
 
@@ -68,9 +68,9 @@ public class GhRepositoryRestController {
 	@Operation(summary = "保存自己的仓库")
 	@PostMapping("/save-my-repository")
 	public Response<?> saveMyselfRepository(HttpServletRequest request, HttpServletResponse response,
-			@Valid @RequestBody SaveMyselfRepositoryBO saveRepositoryBO) throws GitLabApiException, IOException {
+			@Valid @RequestBody SaveMyselfRepositoryBO saveRepositoryBO) throws IOException {
 		ghRepositoryService.saveMyselfRepository(saveRepositoryBO.getOauthToken(), saveRepositoryBO.isSaveBranch(),
-				saveRepositoryBO.isSavePullRequest());
+				saveRepositoryBO.isSavePullRequest(), saveRepositoryBO.getIssueState());
 		return Response.ok();
 	}
 
