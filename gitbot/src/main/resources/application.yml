@@ -73,7 +73,14 @@ gitbot:
 ---
 
 springdoc:
+  api-docs:
+    # 是否开启 API
+    # 优先级高于 springdoc.swagger-ui.enabled
+    enabled: ${GITBOT_SPRINGDOC_API_DOCS_ENABLED:true}
   swagger-ui:
+    # 是否开启 UI
+    # 优先级低于 springdoc.api-docs.enabled
+    enabled: ${GITBOT_SPRINGDOC_SWAGGER_UI_ENABLED:true}
     default-models-expand-depth: 20
     default-model-expand-depth: 20
     oauth:
