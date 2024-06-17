@@ -104,7 +104,7 @@ public class GhRepositoryServiceImpl extends ServiceImpl<GhRepositoryMapper, GhR
 					}
 
 					if (savePullRequest) {
-						ghPullRequestService.savePullRequest(oauthToken, repository.getId(), GHIssueState.ALL);
+						ghPullRequestService.savePullRequest(oauthToken, repository.getId(), issueState);
 					}
 				}
 			}
@@ -172,7 +172,7 @@ public class GhRepositoryServiceImpl extends ServiceImpl<GhRepositoryMapper, GhR
 				}
 
 				if (savePullRequest) {
-					ghPullRequestService.savePullRequest(oauthToken, repository.getId(), GHIssueState.ALL);
+					ghPullRequestService.savePullRequest(oauthToken, repository.getId(), issueState);
 				}
 			}
 		}
