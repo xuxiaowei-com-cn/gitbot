@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.com.xuxiaowei.gitbot.mapper.GlInstanceMapper">
+
+    <!-- GitLab 实例列表 -->
+    <select id="list" resultType="cn.com.xuxiaowei.gitbot.vo.GlInstanceVO">
+        SELECT glp.`host`, count(1) sum FROM gl_project glp GROUP BY glp.`host`
+    </select>
+
+</mapper>
