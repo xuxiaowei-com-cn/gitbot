@@ -36,6 +36,22 @@ class IGhRepositoryServiceTests {
 	}
 
 	@Test
+	void saveMyselfOrganizationRepository() throws IOException {
+		String gitbotGithubEnable = System.getenv("GITBOT_GITHUB_ENABLE");
+		log.info(gitbotGithubEnable);
+		if (Boolean.TRUE.toString().equals(gitbotGithubEnable)) {
+			String oauthToken = System.getenv("GITBOT_GITHUB_TOKEN");
+			boolean saveBranch = false;
+			boolean savePullRequest = false;
+			GHIssueState issueState = GHIssueState.OPEN;
+			ghRepositoryService.saveMyselfOrganizationRepository(oauthToken, saveBranch, savePullRequest, issueState);
+		}
+		else {
+			log.info("跳过 GitHub 测试");
+		}
+	}
+
+	@Test
 	void saveMyselfRepository() throws IOException {
 		String gitbotGithubEnable = System.getenv("GITBOT_GITHUB_ENABLE");
 		log.info(gitbotGithubEnable);

@@ -23,6 +23,12 @@ public interface IGhRepositoryService extends IService<GhRepository> {
 			GHIssueState issueState) throws IOException;
 
 	/**
+	 * 保存自己组织的仓库
+	 */
+	void saveMyselfOrganizationRepository(String oauthToken, boolean saveBranch, boolean savePullRequest,
+			GHIssueState issueState) throws IOException;
+
+	/**
 	 * 1. 不提供任何授权，仅可获取公开仓库
 	 * <p>
 	 * 2. 提供 repo 或 public_repo 权限，可获取所有仓库

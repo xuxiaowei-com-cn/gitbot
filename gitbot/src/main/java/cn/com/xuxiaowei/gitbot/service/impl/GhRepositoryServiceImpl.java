@@ -116,6 +116,76 @@ public class GhRepositoryServiceImpl extends ServiceImpl<GhRepositoryMapper, GhR
 	}
 
 	/**
+	 * 保存自己组织的仓库
+	 */
+	@Override
+	public void saveMyselfOrganizationRepository(String oauthToken, boolean saveBranch, boolean savePullRequest,
+			GHIssueState issueState) throws IOException {
+
+		int saved = 0;
+		int updated = 0;
+
+		try {
+
+			GitHubBuilder gitHubBuilder = new GitHubBuilder();
+			gitHubBuilder.withOAuthToken(oauthToken);
+			GitHub github = gitHubBuilder.build();
+			GHMyself myself = github.getMyself();
+
+			GHPersonSet<GHOrganization> allOrganizations = myself.getAllOrganizations();
+
+			for (GHOrganization organization : allOrganizations) {
+
+				Map<String, GHRepository> allRepositories = organization.getRepositories();
+
+				for (GHRepository repository : allRepositories.values()) {
+
+					GhRepository ghRepository = copyProperty(repository);
+
+					QueryWrapper<GhRepository> queryWrapper = new QueryWrapper<GhRepository>()
+						//
+						.eq("id", ghRepository.getId());
+					long count = count(queryWrapper);
+					if (count == 0) {
+						save(ghRepository);
+						saved++;
+					}
+					else {
+						update(ghRepository, queryWrapper);
+						updated++;
+					}
+
+					if (saveBranch) {
+						Map<String, GHBranch> branches = repository.getBranches();
+
+						for (GHBranch branch : branches.values()) {
+
+							GhBranch ghBranch = new GhBranch();
+							ghBranch.setId(repository.getId());
+							ghBranch.setName(branch.getName());
+							ghBranch.setSha(branch.getSHA1());
+							ghBranch.setProtection(branch.isProtected());
+							// @formatter:off
+							ghBranch.setProtectionUrl(branch.getProtectionUrl() == null ? null : branch.getProtectionUrl().toString());
+							// @formatter:on
+
+							ghBranchService.saveOrUpdate(ghBranch);
+						}
+					}
+
+					if (savePullRequest) {
+						ghPullRequestService.savePullRequest(oauthToken, repository.getId(), issueState);
+					}
+				}
+			}
+		}
+		finally {
+			log.debug("saved: {}", saved);
+			log.debug("updated: {}", updated);
+		}
+	}
+
+	/**
 	 * 1. 不提供任何授权，仅可获取公开仓库
 	 * <p>
 	 * 2. 提供 repo 或 public_repo 权限，可获取所有仓库
