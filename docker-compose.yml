@@ -19,5 +19,8 @@ services:
       - GITBOT_DATABASE_USERNAME=${GITBOT_DATABASE_USERNAME:-root}
       - GITBOT_DATABASE_PASSWORD=${GITBOT_DATABASE_PASSWORD:-xuxiaowei.com.cn}
       - GITBOT_SPRINGDOC_OAUTHFLOW_TOKEN_URL=${GITBOT_SPRINGDOC_OAUTHFLOW_TOKEN_URL:-http://127.0.0.1:45950/oauth2/token}
+      # 使用容器部署时，此处应该设置为访问容器的地址
+      # 如果容器前使用了代理，请填写代理的地址
+      - GITBOT_AUTHORIZE_REDIRECT_URI=${GITBOT_AUTHORIZE_REDIRECT_URI:-http://127.0.0.1:45950/login/code}
       - APP_ARGS=${GITBOT_APP_ARGS:-}
     container_name: gitbot
