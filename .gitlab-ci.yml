@@ -15,3 +15,4 @@ include:
   - local: .gitlab/ci/build-java.yml
   - local: .gitlab/ci/build-docker.yml
   - local: .gitlab/ci/build-deploy-g150s.yml
+  - local: .gitlab/ci/build-deploy-sg.yml
