@@ -5,6 +5,7 @@ import { RouterView } from 'vue-router'
 <template>
   <nav>
     <el-link href="/" type="primary">Home</el-link>
+    <el-link href="/gitlab" type="primary">GitLab</el-link>
     <el-link href="/about" type="primary">About</el-link>
     <!--<RouterLink to="/">Home</RouterLink>-->
     <!--<RouterLink to="/about">About</RouterLink>-->
@@ -14,7 +15,6 @@ import { RouterView } from 'vue-router'
 </template>
 
 <style scoped>
-
 nav {
   width: 100%;
   font-size: 12px;
@@ -31,5 +31,4 @@ nav a {
 nav a:first-of-type {
   border: 0;
 }
-
 </style>

@@ -18,6 +18,11 @@ const router = createRouter({
       component: HomeView
     },
     {
+      path: '/gitlab',
+      name: 'gitlab',
+      component: () => import('../views/GitLabView.vue')
+    },
+    {
       path: '/about',
       name: 'about',
       // route level code-splitting

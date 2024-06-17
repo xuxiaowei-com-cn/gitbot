@@ -1,5 +1,6 @@
-import axios, { AxiosError } from 'axios'
+import axios, { AxiosError, type InternalAxiosRequestConfig } from 'axios'
 import { ElMessage } from 'element-plus'
+import { mainStore } from '@/stores/config'
 
 export interface AjaxResponse<T> {
   httpStatus: number
@@ -11,6 +12,14 @@ export interface AjaxResponse<T> {
   url: String
 }
 
+export interface Page<R> {
+  records: R[]
+  total: number
+  size: number
+  current: number
+  pages: number
+}
+
 // create an axios instance
 const service = axios.create({
   baseURL: import.meta.env.VITE_APP_BASE_API, // BASE URL
@@ -20,7 +29,13 @@ const service = axios.create({
 
 // request interceptor
 service.interceptors.request.use(
-  (config: any) => {
+  (config: InternalAxiosRequestConfig) => {
+    console.log(config)
+    if (!config.url?.startsWith('/login/ticket?')) {
+      if (mainStore.ticket?.accessToken) {
+        config.headers.authorization = 'Bearer ' + mainStore.ticket.accessToken
+      }
+    }
     return config
   },
   (error) => {

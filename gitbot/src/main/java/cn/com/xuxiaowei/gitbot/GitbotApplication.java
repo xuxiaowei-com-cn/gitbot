@@ -1,11 +1,15 @@
 package cn.com.xuxiaowei.gitbot;
 
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+/**
+ * 程序执行入口
+ *
+ * @author xuxiaowei
+ * @since 0.0.1
+ */
 @SpringBootApplication
-@MapperScan({ "cn.com.xuxiaowei.gitbot.mapper" })
 public class GitbotApplication {
 
 	public static void main(String[] args) {

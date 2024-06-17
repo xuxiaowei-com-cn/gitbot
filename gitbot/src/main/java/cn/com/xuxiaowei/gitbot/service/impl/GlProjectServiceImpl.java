@@ -1,5 +1,6 @@
 package cn.com.xuxiaowei.gitbot.service.impl;
 
+import cn.com.xuxiaowei.gitbot.bo.GlProjectBO;
 import cn.com.xuxiaowei.gitbot.entity.GlProject;
 import cn.com.xuxiaowei.gitbot.mapper.GlProjectMapper;
 import cn.com.xuxiaowei.gitbot.properties.GitbotProperties;
@@ -8,6 +9,7 @@ import cn.com.xuxiaowei.gitbot.service.IGlEnvironmentService;
 import cn.com.xuxiaowei.gitbot.service.IGlProjectService;
 import cn.com.xuxiaowei.gitbot.service.IGlVariableService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.gitlab4j.api.GitLabApi;
@@ -15,6 +17,7 @@ import org.gitlab4j.api.GitLabApiException;
 import org.gitlab4j.api.models.Project;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -59,6 +62,19 @@ public class GlProjectServiceImpl extends ServiceImpl<GlProjectMapper, GlProject
 	@Autowired
 	public void setGlVariableService(IGlVariableService glVariableService) {
 		this.glVariableService = glVariableService;
+	}
+
+	@Override
+	public Page<GlProject> pageByGlProjectBO(GlProjectBO glProjectBO) {
+
+		Page<GlProject> page = new Page<>(glProjectBO.getCurrent(), glProjectBO.getSize());
+
+		String host = glProjectBO.getHost();
+		String name = glProjectBO.getName();
+
+		return lambdaQuery().eq(StringUtils.hasText(host), GlProject::getHost, host)
+			.like(StringUtils.hasText(name), GlProject::getName, "%" + name + "%")
+			.page(page);
 	}
 
 	@Override
