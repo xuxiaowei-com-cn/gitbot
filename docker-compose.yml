@@ -21,6 +21,10 @@ services:
       - GITBOT_SPRINGDOC_OAUTHFLOW_TOKEN_URL=${GITBOT_SPRINGDOC_OAUTHFLOW_TOKEN_URL:-http://127.0.0.1:45950/oauth2/token}
       # 使用容器部署时，此处应该设置为访问容器的地址
       # 如果容器前使用了代理，请填写代理的地址
+      # 并且要在 oauth2_registered_client 表中的 redirect_uris 字段中增加此地址
       - GITBOT_AUTHORIZE_REDIRECT_URI=${GITBOT_AUTHORIZE_REDIRECT_URI:-http://127.0.0.1:45950/login/code}
+      # 使用容器部署时，此处应该设置为访问容器的地址
+      # 如果容器前使用了代理，请填写代理的地址
+      - GITBOT_AUTHORIZE_SUCCESS_URL=${GITBOT_AUTHORIZE_SUCCESS_URL:-http://127.0.0.1:45950}
       - APP_ARGS=${GITBOT_APP_ARGS:-}
     container_name: gitbot
