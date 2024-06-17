@@ -102,6 +102,11 @@ public class GitbotProperties {
 	private String pattern;
 
 	/**
+	 * 允许 IP 访问的 Redis key
+	 */
+	private String allowIpRedisKey = "allow:ip";
+
+	/**
 	 * GitLab 配置
 	 */
 	private GitLabProperties gitlab = new GitLabProperties();
