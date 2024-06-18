@@ -118,6 +118,11 @@ public class GitbotProperties {
 	private String saveProjectRedisKeyPrefix = "save:project:";
 
 	/**
+	 * 保存分支的 Redis Key 前缀
+	 */
+	private String saveBranchRedisKeyPrefix = "save:branch:";
+
+	/**
 	 * 数据储存时间
 	 */
 	private Long dataTimeout = 1L;
