@@ -73,6 +73,9 @@ gitbot:
   allow-credentials: true
   max-age: 3600
   pattern: /**
+  save-namespace-redis-key-prefix: ${GITBOT_SAVE_NAMESPACE_REDIS_KEY_PREFIX:save:namespace:}
+  scheduled:
+    enabled-gitlab: ${GITBOT_SCHEDULED_ENABLED_GITLAB:false}
 
 ---
 

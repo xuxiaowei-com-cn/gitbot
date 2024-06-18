@@ -15,7 +15,16 @@ import org.springframework.boot.test.context.SpringBootTest;
 class TableTests {
 
 	@Autowired
+	private GlInstanceService glInstanceService;
+
+	@Autowired
 	private IAuthoritiesService authoritiesService;
+
+	@Autowired
+	private IGhBranchService ghBranchService;
+
+	@Autowired
+	private IGhOrganizationService ghOrganizationService;
 
 	@Autowired
 	private IGhPullRequestService ghPullRequestService;
@@ -57,6 +66,9 @@ class TableTests {
 	private IGroupsService groupsService;
 
 	@Autowired
+	private InstanceService instanceService;
+
+	@Autowired
 	private IOauth2AuthorizationConsentService oauth2AuthorizationConsentService;
 
 	@Autowired
@@ -66,11 +78,17 @@ class TableTests {
 	private IOauth2RegisteredClientService oauth2RegisteredClientService;
 
 	@Autowired
+	private IScheduledTokenService scheduledTokenService;
+
+	@Autowired
 	private IUsersService usersService;
 
 	@Test
 	void list() {
+		glInstanceService.list();
 		authoritiesService.list(new Page<>(1, 1));
+		ghBranchService.list(new Page<>(1, 1));
+		ghOrganizationService.list(new Page<>(1, 1));
 		ghPullRequestService.list(new Page<>(1, 1));
 		ghRepositoryService.list(new Page<>(1, 1));
 		glBranchService.list(new Page<>(1, 1));
@@ -84,9 +102,11 @@ class TableTests {
 		groupAuthoritiesService.list(new Page<>(1, 1));
 		groupMembersService.list(new Page<>(1, 1));
 		groupsService.list(new Page<>(1, 1));
+		instanceService.list();
 		oauth2AuthorizationConsentService.list(new Page<>(1, 1));
 		oauth2AuthorizationService.list(new Page<>(1, 1));
 		oauth2RegisteredClientService.list(new Page<>(1, 1));
+		scheduledTokenService.list(new Page<>(1, 1));
 		usersService.list(new Page<>(1, 1));
 	}
 

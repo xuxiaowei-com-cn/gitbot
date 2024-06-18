@@ -16,6 +16,14 @@ import java.net.MalformedURLException;
  */
 public interface IGlNamespaceService extends IService<GlNamespace> {
 
+	/**
+	 * 保存 GitLab 命名空间
+	 * @param hostUrl
+	 * @param ignoreCertificateErrors
+	 * @param personalAccessToken
+	 * @throws GitLabApiException
+	 * @throws MalformedURLException
+	 */
 	void saveNamespace(String hostUrl, boolean ignoreCertificateErrors, String personalAccessToken)
 			throws GitLabApiException, MalformedURLException;
 

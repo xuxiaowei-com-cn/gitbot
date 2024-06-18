@@ -10,6 +10,7 @@ import java.security.PublicKey;
 import java.security.interfaces.RSAPublicKey;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Git 机器人 安全配置
@@ -107,9 +108,29 @@ public class GitbotProperties {
 	private String allowIpRedisKey = "allow:ip";
 
 	/**
+	 * 保存命名空间的 Redis Key 前缀
+	 */
+	private String saveNamespaceRedisKeyPrefix = "save:namespace:";
+
+	/**
+	 * 数据储存时间
+	 */
+	private Long dataTimeout = 1L;
+
+	/**
+	 * 数据储存时间单位
+	 */
+	private TimeUnit dataUnit = TimeUnit.DAYS;
+
+	/**
 	 * GitLab 配置
 	 */
 	private GitLabProperties gitlab = new GitLabProperties();
+
+	/**
+	 * 定时器配置
+	 */
+	private Scheduled scheduled = new Scheduled();
 
 	public PublicKey publicKey() {
 		return RSAUtils.publicKey(this.publicKey);
@@ -134,6 +155,20 @@ public class GitbotProperties {
 		 * 是否保存 Runner Token
 		 */
 		private boolean saveRunnersToken;
+
+	}
+
+	/**
+	 * @author xuxiaowei
+	 * @since 0.0.1
+	 */
+	@Data
+	public static class Scheduled {
+
+		/**
+		 * 是否开启 GitLab
+		 */
+		private boolean enabledGitlab;
 
 	}
 
