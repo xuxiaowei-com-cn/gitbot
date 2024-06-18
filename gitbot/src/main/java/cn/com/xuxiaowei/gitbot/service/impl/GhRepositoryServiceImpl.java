@@ -1,23 +1,34 @@
 package cn.com.xuxiaowei.gitbot.service.impl;
 
+import cn.com.xuxiaowei.gitbot.constant.LogConstants;
+import cn.com.xuxiaowei.gitbot.constant.RedisKeyConstants;
 import cn.com.xuxiaowei.gitbot.entity.GhBranch;
 import cn.com.xuxiaowei.gitbot.entity.GhRepository;
 import cn.com.xuxiaowei.gitbot.mapper.GhRepositoryMapper;
+import cn.com.xuxiaowei.gitbot.properties.GitbotProperties;
 import cn.com.xuxiaowei.gitbot.service.IGhBranchService;
 import cn.com.xuxiaowei.gitbot.service.IGhOrganizationService;
 import cn.com.xuxiaowei.gitbot.service.IGhPullRequestService;
 import cn.com.xuxiaowei.gitbot.service.IGhRepositoryService;
+import cn.com.xuxiaowei.gitbot.utils.DateUtils;
+import cn.com.xuxiaowei.gitbot.utils.RedisKeyUtils;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.kohsuke.github.*;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 /**
  * <p>
@@ -32,11 +43,25 @@ import java.util.Map;
 public class GhRepositoryServiceImpl extends ServiceImpl<GhRepositoryMapper, GhRepository>
 		implements IGhRepositoryService {
 
+	private GitbotProperties gitbotProperties;
+
+	private StringRedisTemplate stringRedisTemplate;
+
 	private IGhOrganizationService ghOrganizationService;
 
 	private IGhBranchService ghBranchService;
 
 	private IGhPullRequestService ghPullRequestService;
+
+	@Autowired
+	public void setGitbotProperties(GitbotProperties gitbotProperties) {
+		this.gitbotProperties = gitbotProperties;
+	}
+
+	@Autowired
+	public void setStringRedisTemplate(StringRedisTemplate stringRedisTemplate) {
+		this.stringRedisTemplate = stringRedisTemplate;
+	}
 
 	@Autowired
 	public void setGhOrganizationService(IGhOrganizationService ghOrganizationService) {
@@ -60,8 +85,19 @@ public class GhRepositoryServiceImpl extends ServiceImpl<GhRepositoryMapper, GhR
 	public void saveMyOrganizationRepository(String oauthToken, boolean saveBranch, boolean savePullRequest,
 			GHIssueState issueState) throws IOException {
 
-		int saved = 0;
-		int updated = 0;
+		String id = MDC.get(LogConstants.G_REQUEST_ID);
+		if (!StringUtils.hasText(id)) {
+			id = UUID.randomUUID().toString();
+		}
+
+		Long dataTimeout = gitbotProperties.getDataTimeout();
+		TimeUnit dataUnit = gitbotProperties.getDataUnit();
+		String saveProjectRedisKeyPrefix = gitbotProperties.getSaveProjectRedisKeyPrefix();
+		String saveProjectRedisHashKey = RedisKeyUtils.hash(saveProjectRedisKeyPrefix, "github.com", id);
+
+		// @formatter:off
+		stringRedisTemplate.opsForHash().put(saveProjectRedisHashKey, RedisKeyConstants.START_AT, DateUtils.format(LocalDateTime.now()));
+		// @formatter:on
 
 		try {
 			List<GHOrganization> ghOrganizations = ghOrganizationService.saveMyOrganizations(oauthToken);
@@ -78,11 +114,15 @@ public class GhRepositoryServiceImpl extends ServiceImpl<GhRepositoryMapper, GhR
 					long count = count(queryWrapper);
 					if (count == 0) {
 						save(ghRepository);
-						saved++;
+						// @formatter:off
+						stringRedisTemplate.opsForHash().increment(saveProjectRedisHashKey, RedisKeyConstants.SAVE, 1);
+						// @formatter:on
 					}
 					else {
 						update(ghRepository, queryWrapper);
-						updated++;
+						// @formatter:off
+						stringRedisTemplate.opsForHash().increment(saveProjectRedisHashKey, RedisKeyConstants.UPDATE, 1);
+						// @formatter:on
 					}
 
 					if (saveBranch) {
@@ -110,9 +150,17 @@ public class GhRepositoryServiceImpl extends ServiceImpl<GhRepositoryMapper, GhR
 			}
 		}
 		finally {
-			log.debug("saved: {}", saved);
-			log.debug("updated: {}", updated);
+			stringRedisTemplate.expire(saveProjectRedisHashKey, dataTimeout, dataUnit);
+
+			// @formatter:off
+			log.debug("saved: {}", stringRedisTemplate.opsForHash().get(saveProjectRedisHashKey, RedisKeyConstants.SAVE));
+			log.debug("updated: {}", stringRedisTemplate.opsForHash().get(saveProjectRedisHashKey, RedisKeyConstants.UPDATE));
+			// @formatter:on
 		}
+
+		// @formatter:off
+		stringRedisTemplate.opsForHash().put(saveProjectRedisHashKey, RedisKeyConstants.END_AT, DateUtils.format(LocalDateTime.now()));
+		// @formatter:on
 	}
 
 	/**

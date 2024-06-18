@@ -180,6 +180,11 @@ public class GitbotProperties {
 		 */
 		private boolean enabledGitlab;
 
+		/**
+		 * 是否开启 GitLab
+		 */
+		private boolean enabledGithub;
+
 	}
 
 }

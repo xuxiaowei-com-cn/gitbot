@@ -6,6 +6,8 @@ import cn.com.xuxiaowei.gitbot.service.IScheduledTokenService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * <p>
  * 服务实现类
@@ -17,5 +19,15 @@ import org.springframework.stereotype.Service;
 @Service
 public class ScheduledTokenServiceImpl extends ServiceImpl<ScheduledTokenMapper, ScheduledToken>
 		implements IScheduledTokenService {
+
+	@Override
+	public List<ScheduledToken> listByHostNotGitHub() {
+		return lambdaQuery().notLike(ScheduledToken::getHost, "%github.com%").list();
+	}
+
+	@Override
+	public ScheduledToken getByHostGitHub() {
+		return lambdaQuery().like(ScheduledToken::getHost, "%github.com%").one();
+	}
 
 }

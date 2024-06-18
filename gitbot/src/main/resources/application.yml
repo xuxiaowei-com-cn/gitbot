@@ -78,6 +78,7 @@ gitbot:
   save-branch-redis-key-prefix: ${GITBOT_SAVE_BRANCH_REDIS_KEY_PREFIX:save:branch:}
   scheduled:
     enabled-gitlab: ${GITBOT_SCHEDULED_ENABLED_GITLAB:false}
+    enabled-github: ${GITBOT_SCHEDULED_ENABLED_GITHUB:false}
 
 ---
 

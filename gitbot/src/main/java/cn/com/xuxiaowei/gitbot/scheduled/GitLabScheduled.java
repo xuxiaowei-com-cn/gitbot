@@ -63,7 +63,7 @@ public class GitLabScheduled {
 
 		log.info("Start Class: {} Method: {}", className, methodName);
 
-		List<ScheduledToken> scheduledTokenList = scheduledTokenService.list();
+		List<ScheduledToken> scheduledTokenList = scheduledTokenService.listByHostNotGitHub();
 
 		log.info("scheduledTokenList.size(): {}", scheduledTokenList.size());
 
@@ -105,7 +105,7 @@ public class GitLabScheduled {
 
 		log.info("Start Class: {} Method: {}", className, methodName);
 
-		List<ScheduledToken> scheduledTokenList = scheduledTokenService.list();
+		List<ScheduledToken> scheduledTokenList = scheduledTokenService.listByHostNotGitHub();
 
 		log.info("scheduledTokenList.size(): {}", scheduledTokenList.size());
 
