@@ -170,8 +170,19 @@ public class GhRepositoryServiceImpl extends ServiceImpl<GhRepositoryMapper, GhR
 	public void saveMyselfOrganizationRepository(String oauthToken, boolean saveBranch, boolean savePullRequest,
 			GHIssueState issueState) throws IOException {
 
-		int saved = 0;
-		int updated = 0;
+		String id = MDC.get(LogConstants.G_REQUEST_ID);
+		if (!StringUtils.hasText(id)) {
+			id = UUID.randomUUID().toString();
+		}
+
+		Long dataTimeout = gitbotProperties.getDataTimeout();
+		TimeUnit dataUnit = gitbotProperties.getDataUnit();
+		String saveProjectRedisKeyPrefix = gitbotProperties.getSaveProjectRedisKeyPrefix();
+		String saveProjectRedisHashKey = RedisKeyUtils.hash(saveProjectRedisKeyPrefix, "github.com", id);
+
+		// @formatter:off
+		stringRedisTemplate.opsForHash().put(saveProjectRedisHashKey, RedisKeyConstants.START_AT, DateUtils.format(LocalDateTime.now()));
+		// @formatter:on
 
 		try {
 
@@ -196,11 +207,15 @@ public class GhRepositoryServiceImpl extends ServiceImpl<GhRepositoryMapper, GhR
 					long count = count(queryWrapper);
 					if (count == 0) {
 						save(ghRepository);
-						saved++;
+						// @formatter:off
+						stringRedisTemplate.opsForHash().increment(saveProjectRedisHashKey, RedisKeyConstants.SAVE, 1);
+						// @formatter:on
 					}
 					else {
 						update(ghRepository, queryWrapper);
-						updated++;
+						// @formatter:off
+						stringRedisTemplate.opsForHash().increment(saveProjectRedisHashKey, RedisKeyConstants.UPDATE, 1);
+						// @formatter:on
 					}
 
 					if (saveBranch) {
@@ -228,9 +243,17 @@ public class GhRepositoryServiceImpl extends ServiceImpl<GhRepositoryMapper, GhR
 			}
 		}
 		finally {
-			log.debug("saved: {}", saved);
-			log.debug("updated: {}", updated);
+			stringRedisTemplate.expire(saveProjectRedisHashKey, dataTimeout, dataUnit);
+
+			// @formatter:off
+			log.debug("saved: {}", stringRedisTemplate.opsForHash().get(saveProjectRedisHashKey, RedisKeyConstants.SAVE));
+			log.debug("updated: {}", stringRedisTemplate.opsForHash().get(saveProjectRedisHashKey, RedisKeyConstants.UPDATE));
+			// @formatter:on
 		}
+
+		// @formatter:off
+		stringRedisTemplate.opsForHash().put(saveProjectRedisHashKey, RedisKeyConstants.END_AT, DateUtils.format(LocalDateTime.now()));
+		// @formatter:on
 	}
 
 	/**
@@ -242,8 +265,19 @@ public class GhRepositoryServiceImpl extends ServiceImpl<GhRepositoryMapper, GhR
 	public void saveMyselfRepository(String oauthToken, boolean saveBranch, boolean savePullRequest,
 			GHIssueState issueState) throws IOException {
 
-		int saved = 0;
-		int updated = 0;
+		String id = MDC.get(LogConstants.G_REQUEST_ID);
+		if (!StringUtils.hasText(id)) {
+			id = UUID.randomUUID().toString();
+		}
+
+		Long dataTimeout = gitbotProperties.getDataTimeout();
+		TimeUnit dataUnit = gitbotProperties.getDataUnit();
+		String saveProjectRedisKeyPrefix = gitbotProperties.getSaveProjectRedisKeyPrefix();
+		String saveProjectRedisHashKey = RedisKeyUtils.hash(saveProjectRedisKeyPrefix, "github.com", id);
+
+		// @formatter:off
+		stringRedisTemplate.opsForHash().put(saveProjectRedisHashKey, RedisKeyConstants.START_AT, DateUtils.format(LocalDateTime.now()));
+		// @formatter:on
 
 		try {
 
@@ -264,11 +298,15 @@ public class GhRepositoryServiceImpl extends ServiceImpl<GhRepositoryMapper, GhR
 				long count = count(queryWrapper);
 				if (count == 0) {
 					save(ghRepository);
-					saved++;
+					// @formatter:off
+					stringRedisTemplate.opsForHash().increment(saveProjectRedisHashKey, RedisKeyConstants.SAVE, 1);
+					// @formatter:on
 				}
 				else {
 					update(ghRepository, queryWrapper);
-					updated++;
+					// @formatter:off
+					stringRedisTemplate.opsForHash().increment(saveProjectRedisHashKey, RedisKeyConstants.UPDATE, 1);
+					// @formatter:on
 				}
 
 				if (saveBranch) {
@@ -295,9 +333,17 @@ public class GhRepositoryServiceImpl extends ServiceImpl<GhRepositoryMapper, GhR
 			}
 		}
 		finally {
-			log.debug("saved: {}", saved);
-			log.debug("updated: {}", updated);
+			stringRedisTemplate.expire(saveProjectRedisHashKey, dataTimeout, dataUnit);
+
+			// @formatter:off
+			log.debug("saved: {}", stringRedisTemplate.opsForHash().get(saveProjectRedisHashKey, RedisKeyConstants.SAVE));
+			log.debug("updated: {}", stringRedisTemplate.opsForHash().get(saveProjectRedisHashKey, RedisKeyConstants.UPDATE));
+			// @formatter:on
 		}
+
+		// @formatter:off
+		stringRedisTemplate.opsForHash().put(saveProjectRedisHashKey, RedisKeyConstants.END_AT, DateUtils.format(LocalDateTime.now()));
+		// @formatter:on
 	}
 
 	private GhRepository copyProperty(GHRepository repository) throws IOException {
