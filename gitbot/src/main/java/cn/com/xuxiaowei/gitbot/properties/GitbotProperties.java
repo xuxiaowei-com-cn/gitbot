@@ -113,6 +113,11 @@ public class GitbotProperties {
 	private String saveNamespaceRedisKeyPrefix = "save:namespace:";
 
 	/**
+	 * 保存项目的 Redis Key 前缀
+	 */
+	private String saveProjectRedisKeyPrefix = "save:project:";
+
+	/**
 	 * 数据储存时间
 	 */
 	private Long dataTimeout = 1L;
