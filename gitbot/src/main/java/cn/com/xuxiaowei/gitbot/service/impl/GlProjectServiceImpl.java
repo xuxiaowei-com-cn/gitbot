@@ -89,7 +89,7 @@ public class GlProjectServiceImpl extends ServiceImpl<GlProjectMapper, GlProject
 		String name = glProjectBO.getName();
 
 		return lambdaQuery().eq(StringUtils.hasText(host), GlProject::getHost, host)
-			.like(StringUtils.hasText(name), GlProject::getName, "%" + name + "%")
+			.like(StringUtils.hasText(name), GlProject::getName, name)
 			.page(page);
 	}
 

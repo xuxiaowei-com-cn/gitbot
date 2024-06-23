@@ -19,4 +19,12 @@ public class DateUtils {
 		return localDateTime.format(DateTimeFormatter.ofPattern(pattern));
 	}
 
+	public static LocalDateTime parse(String text) {
+		return LocalDateTime.parse(text, DateTimeFormatter.ofPattern(NORM_DATETIME_PATTERN));
+	}
+
+	public static LocalDateTime parse(String text, String pattern) {
+		return LocalDateTime.parse(text, DateTimeFormatter.ofPattern(pattern));
+	}
+
 }

@@ -79,6 +79,7 @@ gitbot:
   scheduled:
     enabled-gitlab: ${GITBOT_SCHEDULED_ENABLED_GITLAB:false}
     enabled-github: ${GITBOT_SCHEDULED_ENABLED_GITHUB:false}
+    auto-pull-request: ${GITBOT_SCHEDULED_AUTO_PULL_REQUEST:false}
 
 ---
 

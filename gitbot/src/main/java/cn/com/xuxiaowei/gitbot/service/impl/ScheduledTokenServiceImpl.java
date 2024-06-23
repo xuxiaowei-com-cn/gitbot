@@ -22,12 +22,12 @@ public class ScheduledTokenServiceImpl extends ServiceImpl<ScheduledTokenMapper,
 
 	@Override
 	public List<ScheduledToken> listByHostNotGitHub() {
-		return lambdaQuery().notLike(ScheduledToken::getHost, "%github.com%").list();
+		return lambdaQuery().notLike(ScheduledToken::getHost, "github.com").list();
 	}
 
 	@Override
 	public ScheduledToken getByHostGitHub() {
-		return lambdaQuery().like(ScheduledToken::getHost, "%github.com%").one();
+		return lambdaQuery().like(ScheduledToken::getHost, "github.com").one();
 	}
 
 }

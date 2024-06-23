@@ -20,4 +20,8 @@ public class RedisKeyConstants {
 
 	public static final String EXCEPTION_STACK_TRACE = "exceptionStackTrace";
 
+	public static final String EXECUTE_AT = "executeAt";
+
+	public static final String REF = "ref";
+
 }

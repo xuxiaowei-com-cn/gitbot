@@ -123,6 +123,16 @@ public class GitbotProperties {
 	private String saveBranchRedisKeyPrefix = "save:branch:";
 
 	/**
+	 * 自动 PR 的 Redis Key 前缀
+	 */
+	private String autoPullRequestRedisKeyPrefix = "auto:pull-request:";
+
+	/**
+	 * 自动 PR 分支 的 Redis Key 前缀
+	 */
+	private String autoPullRequestBranchRedisKeyPrefix = "auto:pull-request-branch:";
+
+	/**
 	 * 数据储存时间
 	 */
 	private Long dataTimeout = 1L;
@@ -184,6 +194,11 @@ public class GitbotProperties {
 		 * 是否开启 GitLab
 		 */
 		private boolean enabledGithub;
+
+		/**
+		 *
+		 */
+		private boolean autoPullRequest;
 
 	}
 
