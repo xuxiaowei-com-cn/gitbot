@@ -29,7 +29,7 @@
         <gitlab4j-api.version>6.0.0-rc.5</gitlab4j-api.version>
         <mybatis.version>3.0.3</mybatis.version>
         <mybatis-plus.version>3.5.7</mybatis-plus.version>
-        <springdoc.version>2.5.0</springdoc.version>
+        <springdoc.version>2.6.0</springdoc.version>
         <therapi-runtime-javadoc-scribe.version>0.15.0</therapi-runtime-javadoc-scribe.version>
         <therapi-runtime-javadoc.version>0.15.0</therapi-runtime-javadoc.version>
         <spring-javaformat-maven-plugin.version>0.0.42</spring-javaformat-maven-plugin.version>
